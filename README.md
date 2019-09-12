@@ -5,5 +5,5 @@ SJSU Fall 2019 CS157A Section 1 Team 23.
 ## Members
 * **Rick Li**
 * **[Jordan Mercado](https://github.com/jmercad0)**
-* **Mohammad Syed**
+* **[Mohammad Syed](https://github.com/mohammad-syed)**
 
