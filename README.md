@@ -10,6 +10,7 @@ SJSU Fall 2019 CS157A Section 1 Team 23.
 Work done:
 Rick: Project Overview / System Environment
 Jordan: Non-functional Issues
+Mohammad: Functional Requirements / GUI
 ```
 #
 
