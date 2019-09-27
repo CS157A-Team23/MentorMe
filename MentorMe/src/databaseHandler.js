@@ -1,17 +1,15 @@
 const mysql = require('mysql');
 
-const pool = mysql.createPool({
-    connectionLimit: 100,
+const pool = mysql.createConnection({
     host: 'localhost',
-    user: 'nodeuser',
-    password: 'nodetest',   // configure to old mysql_native_password
-    database: 'cs157a',
-    debug: false
+    user: 'root',
+    password: '4Fuckmysql!',   // configure to old mysql_native_password
+    database: 'cs157a'
 });
 
 function handle_database(req, res) {
 
-    pool.query("SELECT * FROM emp", (err, rows, fields) =>{// (id, name, age)
+    pool.query("SELECT * FROM emp", (err, rows, fields) =>{
         if (err) {
             res.json({'code' : 100, 'status' : "Error connecting to Database"});
             return;

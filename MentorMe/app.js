@@ -9,7 +9,7 @@ const http = require("http").Server(app);
 // require the socket.io module
 const io = require("socket.io");
 
-const port = 3000;
+const port = process.env.PORT || 8080;
 
 //bodyparser middleware
 app.use(bodyParser.json());
