@@ -8,12 +8,15 @@ SJSU Fall 2019 CS157A Section 1 Team 23.
 #
  #### [-->Project Requirements<--](https://docs.google.com/document/d/1WV8IgyHZor9jhwabe3yzM_h_zN1EHyvUDX-x4yZ9Rh0/edit?usp=sharing)
 
+
 ```Work done:
 Work done:
 Rick: Project Overview / System Environment
 Jordan: Non-functional Issues
 Mohammad: Functional Requirements / GUI
 ```
+#
+ #### [-->Project Design 1.0<-->](https://docs.google.com/document/d/177uJQPxo0i80Cl-C0bx5Qnmhi2_MS9_nIZISewf4HiA/edit?usp=sharing)
 #
 
 ## Members
