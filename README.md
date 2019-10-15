@@ -16,7 +16,8 @@ Jordan: Non-functional Issues
 Mohammad: Functional Requirements / GUI
 ```
 #
- #### [-->Project Design 1.0<-->](https://docs.google.com/document/d/177uJQPxo0i80Cl-C0bx5Qnmhi2_MS9_nIZISewf4HiA/edit?usp=sharing)
+ #### [-->Project Design 1.0<--](https://docs.google.com/document/d/177uJQPxo0i80Cl-C0bx5Qnmhi2_MS9_nIZISewf4HiA/edit?usp=sharing)
+#### [-->Project Design 2.0<--](https://docs.google.com/document/d/1aaQGpIBDItS3Z1BzWaHIJyZohfQIl5d1qrC4ntv5-l8/edit?usp=sharing)
 #
 
 ## Members
