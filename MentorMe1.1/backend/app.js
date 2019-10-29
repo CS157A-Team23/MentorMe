@@ -4,7 +4,7 @@ const app = express();
 const http = require('http').createServer(app);
 
 require('./startup/db')();
-//require('./startup/routes')(app);
+require('./startup/routes')(app);
 //require('./startup/socketio')(app);
 
 const PORT = 5000;
