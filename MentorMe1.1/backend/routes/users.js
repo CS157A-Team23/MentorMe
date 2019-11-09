@@ -1,13 +1,9 @@
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const db = require("../modules/database");
+const { validateID } = require("../modules/validation");
 const { validateRating } = require("../models/Rates");
-const {
-    User,
-    validateUser,
-    validateEmail,
-    validateID
-} = require("../models/User");
+const { User, validateUser, validateEmail } = require("../models/User");
 const auth = require("../middleware/auth");
 const express = require("express");
 const router = express.Router();
@@ -29,7 +25,6 @@ const tokenGen = require("../modules/authtoken");
  *      "ratingcount": [number]
  * }
  * */
-
 router.get("/me", auth, async (req, res) => {
     const user = await db.query(
         `SELECT id, first_name, last_name, email 
@@ -44,6 +39,12 @@ router.get("/me", auth, async (req, res) => {
     await getInterestSkillRating(user);
     res.send(user);
 });
+
+/**---------------------------
+ * Get all user mentors and mentees
+ * @TODO
+ * ----------------------------
+ */
 
 /**
  * Find another user's information by id include interest / skill/ rating
@@ -120,7 +121,7 @@ router.post("/rate/:id", auth, async (req, res) => {
     let joiResult = validateID(req.params.id);
     if (joiResult.error)
         return res.status(400).send(joiResult.error.details[0].message);
-    joiResult = validateRating(req.body.rating);
+    joiResult = validateRating(req.body);
     if (joiResult.error)
         return res.status(400).send(joiResult.error.details[0].message);
     const user = await db.query(
@@ -159,6 +160,16 @@ router.post("/rate/:id", auth, async (req, res) => {
         return res.send("New rating created");
     }
 });
+
+/**----------------------------
+ * Choose a mentor
+ * @TODO
+ */
+
+/**----------------------------
+ * Choose a mentee
+ * @TODO
+ */
 
 /**
  * Register a User:

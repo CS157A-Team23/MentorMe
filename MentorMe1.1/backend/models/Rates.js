@@ -15,11 +15,13 @@ const Rates = db.define("rates", {
 //Chatlog.removeAttribute('id');
 
 function validateRating(rating) {
-    const schema = Joi.number()
-        .integer()
-        .min(1)
-        .max(10)
-        .required();
+    const schema = Joi.object({
+        rating: Joi.number()
+            .integer()
+            .min(1)
+            .max(10)
+            .required()
+    });
     return schema.validate(rating);
 }
 exports.Rates = Rates;

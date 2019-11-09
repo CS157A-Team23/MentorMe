@@ -60,13 +60,7 @@ function validateUser(user) {
     });
     return schema.validate(user);
 }
-function validateID(id) {
-    const schema = Joi.number()
-        .integer()
-        .min(0)
-        .required();
-    return schema.validate(id);
-}
+
 function validateEmail(email) {
     const schema = Joi.string()
         .min(5)
@@ -77,5 +71,4 @@ function validateEmail(email) {
 }
 exports.User = User;
 exports.validateUser = validateUser;
-exports.validateID = validateID;
 exports.validateEmail = validateEmail;
