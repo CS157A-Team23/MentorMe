@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const { Topic } = require("./Topic");
 const db = require("../modules/database");
+const Joi = require("@hapi/joi");
 
 const Mentors = db.define("mentors", {
     mentee_accepted: {
@@ -20,4 +21,19 @@ const Mentors = db.define("mentors", {
     }
 });
 
+function validateMent(body) {
+    const schema = Joi.object({
+        id: Joi.number()
+            .integer()
+            .min(0)
+            .required(),
+        topicid: Joi.number()
+            .integer()
+            .min(0)
+            .required(),
+        asmentor: Joi.boolean().required()
+    });
+    return schema.validate(body);
+}
 exports.Mentors = Mentors;
+exports.validateMent = validateMent;
