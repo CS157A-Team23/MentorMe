@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import ChatContainer from "./ChatContainer";
+import ChatContainer from "./common/ChatContainer";
 const MESSAGE_SEND = "MESSAGE_SEND";
 const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
 const MESSAGE_ERROR = "MESSAGE_ERROR";
 const ADD_CHAT = "ADD_CHAT";
 const USER_CONNECT = "USER_CONNECT";
 
-class ChatManager extends Component {
+class Connections extends Component {
   state = {
     chats: [],
     activeChat: null
@@ -124,12 +124,12 @@ class ChatManager extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div>
         <h1>Chat Manager</h1>
         {this.renderManager()}
-      </React.Fragment>
+      </div>
     );
   }
 }
 
-export default ChatManager;
+export default Connections;
