@@ -92,7 +92,6 @@ async function getUserChats(userInfo) {
         WHERE user1_id=? OR user2_id=?`,
     { replacements: [userInfo.id, userInfo.id], type: db.QueryTypes.SELECT }
   );
-  console.log(chats);
   console.log("Creating Chat Objects");
   return Promise.all(chats.map(chat => generateChatlog(chat, userInfo.id)));
 }

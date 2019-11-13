@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/ChatContainer.css";
+import "../../css/ChatContainer.css";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 const ChatContainer = props => {
