@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl } from "react-bootstrap";
+import '../css/Login.css';
+import Myfunctions from '../userfunctions';
 
 export default class Login extends Component {
   constructor(props) {
@@ -20,6 +22,15 @@ trackChange = event => {
 
 handleSubmit = event => {
   event.preventDefault();
+  Myfunctions.postLogin({
+    email: this.state.email,
+    password: this.state.password
+  }).then(res => {
+    if(res.status === 200) {
+      this.props.setLogin();
+    }
+  });
+  
 }
 render() {
   return (

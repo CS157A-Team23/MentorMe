@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const database = new Sequelize('cs157a', 'nodeuser', 'nodetest', {
+const database = new Sequelize('cs157a', 'root', '', {
     host: 'localhost',
     dialect:'mysql',
     pool: {

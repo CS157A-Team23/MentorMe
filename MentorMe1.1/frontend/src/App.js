@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import Connections from "./components/Connections";
 import io from "socket.io-client";
+import Login from './components/Login';
 const socketURL = window.location.host;
 
 class App extends Component {
   state = {
-    socket: io({ transports: ["websocket"] })
+    socket: io({ transports: ["websocket"] }),
+    loggedin: false
   };
 
   constructor(props) {
     super(props);
-    sessionStorage.setItem(
-      "authToken",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6ImZpcnN0MSIsImxhc3RfbmFtZSI6Imxhc3QiLCJjaGF0cyI6WzEsMl0sImlhdCI6MTU3MzI3Mjg5NX0.UMuBYJ54MxhOcgXEJ1jQDW_imtzE4-JYUFQFIsebPc4"
-    ); // set own user token here when login
+     // set own user token when login
   }
 
   componentDidMount() {
@@ -24,16 +23,28 @@ class App extends Component {
     });
   }
 
-  // dont unmount chat manager, just set zindex to hide
-  render() {
+  setLogin = () => {
+    this.setState({loggedin:true});
+  }
+
+  renderMain() {
     const { socket } = this.state;
     return (
     <React.Fragment>
       <div><Connections socket={socket} /></div>
       <div></div>
-    </React.Fragment>)
-    
-    ;
+    </React.Fragment>);
+  }
+  renderLogin() {
+    return <Login setLogin={this.setLogin}/>
+  }
+  // dont unmount chat manager, just set zindex to hide
+  render() {
+    return (
+      <React.Fragment> 
+      {this.state.loggedin ? this.renderMain() : this.renderLogin()}
+      </React.Fragment>
+     );
   }
 }
 

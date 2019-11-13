@@ -10,9 +10,9 @@ const postLogin = async function(cred) {
         console.log('entered success');
         const token = res.headers["x-auth-token"];
         console.log(token);
-        localStorage.setItem('authToken', token);
+        sessionStorage.setItem('authToken', token);
         const decoded = jwt.decode(token);
-        localStorage.setItem('myData', decoded.payload);
+        sessionStorage.setItem('myData', decoded.payload);
         return {status: res.status ,body: res.data};
     } catch (error){
         return {status: error.response.status ,body: error.response.data};
@@ -24,7 +24,7 @@ const postLogin = async function(cred) {
 async function syncTest(){
     // axios.get('/me', { the other way to getting the axios, not reccomended for multiple async operations
     //     headers: {
-    //         'x-auth-token': localStorage.authToken
+    //         'x-auth-token': sessionStorage.authToken
     //     }
     // }).then(res => {
     //     //continue operation
@@ -32,7 +32,7 @@ async function syncTest(){
     try{
         const res = await axios.get('/me', {
             headers: {
-                'x-auth-token': localStorage.authToken
+                'x-auth-token': sessionStorage.authToken
             }
         })
     }catch (err) {
