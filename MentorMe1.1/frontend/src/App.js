@@ -27,7 +27,13 @@ class App extends Component {
   // dont unmount chat manager, just set zindex to hide
   render() {
     const { socket } = this.state;
-    return <Connections socket={socket} />;
+    return (
+    <React.Fragment>
+      <div><Connections socket={socket} /></div>
+      <div></div>
+    </React.Fragment>)
+    
+    ;
   }
 }
 
