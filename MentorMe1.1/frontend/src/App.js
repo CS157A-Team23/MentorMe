@@ -1,28 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import React, { Component } from "react";
+import Connections from "./components/Connections";
+import io from "socket.io-client";
+import Login from './components/Login';
+const socketURL = window.location.host;
 
+class App extends Component {
+  state = {
+    socket: io({ transports: ["websocket"] }),
+    loggedin: false
+  };
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload. I made a change.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  constructor(props) {
+    super(props);
+     // set own user token when login
+  }
+
+  componentDidMount() {
+    const { socket } = this.state;
+    console.log(socketURL);
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+  }
+
+  setLogin = () => {
+    this.setState({loggedin:true});
+  }
+
+  renderMain() {
+    const { socket } = this.state;
+    return (
+    <React.Fragment>
+      <div><Connections socket={socket} /></div>
+      <div></div>
+    </React.Fragment>);
+  }
+  renderLogin() {
+    return <Login setLogin={this.setLogin}/>
+  }
+  // dont unmount chat manager, just set zindex to hide
+  render() {
+    return (
+      <React.Fragment> 
+      {this.state.loggedin ? this.renderMain() : this.renderLogin()}
+      </React.Fragment>
+     );
+  }
 }
 
 export default App;

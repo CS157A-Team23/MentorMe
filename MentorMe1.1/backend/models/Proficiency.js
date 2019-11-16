@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize');
-const db = require('../modules/database');
-
-const Proficiency = db.define('proficiency', {
+const Sequelize = require("sequelize");
+const db = require("../modules/database");
+const Joi = require("@hapi/joi");
+const Proficiency = db.define("proficiency", {
     skill: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -16,10 +16,13 @@ const Proficiency = db.define('proficiency', {
 
 function validateProficiency(proficiency) {
     const schema = Joi.object({
-       name:  Joi.number().integer().min(1).max(5).required()
+        skill: Joi.number()
+            .integer()
+            .min(1)
+            .max(5)
+            .required()
     });
     return schema.validate(proficiency);
-
 }
 exports.Proficiency = Proficiency;
 exports.validateProficiency = validateProficiency;

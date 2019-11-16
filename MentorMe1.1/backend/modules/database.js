@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-
-const database = new Sequelize('cs157a', 'nodeuser', 'nodetest', {
+const config = require("config");
+const database = new Sequelize('cs157a', config.get('mysqluser'), config.get('mysqlpass'), {
     host: 'localhost',
     dialect:'mysql',
     pool: {
