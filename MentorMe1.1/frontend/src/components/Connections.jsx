@@ -94,20 +94,11 @@ class Connections extends Component {
 
   //-------------------------------- RENDER FUNCTIONS --------------------------------//
 
-  renderManager = () => {
+  renderChatContainer() {
     const { chats, activeChat } = this.state;
     const { socket } = this.props;
     return (
       <React.Fragment>
-        {chats.map(chat => (
-          <button
-            key={chat.id}
-            onClick={() => this.handleSetActiveChat(chat)}
-            className="btn btn-primary"
-          >
-            {chat.name}
-          </button>
-        ))}
         {activeChat ? (
           <ChatContainer
             chat={activeChat}
@@ -116,17 +107,51 @@ class Connections extends Component {
             onSend={message => this.handleSendMessage(activeChat.id, message)}
           />
         ) : (
-          "No active Chat"
+          <div className="jumbotron">
+            <p className="lead">
+              Select a chat on the right to begin chatting!
+            </p>
+          </div>
         )}
       </React.Fragment>
     );
-  };
+  }
+
+  renderConnectionList() {
+    const { chats, activeChat } = this.state;
+    const { socket } = this.props;
+
+    return (
+      <React.Fragment>
+        <ul className="list-group">
+          {chats.map(chat => (
+            <li
+              key={chat.id}
+              onClick={() => this.handleSetActiveChat(chat)}
+              className={
+                chat === activeChat
+                  ? "list-group-item list-group-item-primary"
+                  : "list-group-item"
+              }
+            >
+              {chat.name}
+            </li>
+          ))}
+        </ul>
+      </React.Fragment>
+    );
+  }
 
   render() {
     return (
-      <div>
-        <h1>Chat Manager</h1>
-        {this.renderManager()}
+      <div className="container">
+        <div className="row">
+          <div className="col-9">
+            <h3>Connections</h3>
+            {this.renderChatContainer()}
+          </div>
+          <div className="col-3">{this.renderConnectionList()}</div>
+        </div>
       </div>
     );
   }

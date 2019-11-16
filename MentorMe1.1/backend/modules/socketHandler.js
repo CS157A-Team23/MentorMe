@@ -55,15 +55,16 @@ module.exports = function(socket) {
         type: db.QueryTypes.INSERT
       }
     );
+    const time = new Date().toISOString();
     socket.broadcast.emit(`${MESSAGE_RECIEVE}-${chatid}`, {
       message,
       name: userInfo.first_name,
-      created_at: "now"
+      created_at: time
     });
     socket.emit(`${MESSAGE_RECIEVE}-${chatid}`, {
       message,
       name: "Me",
-      created_at: "now"
+      created_at: time
     });
   });
 
@@ -103,7 +104,7 @@ const generateChatlog = async (chat, id) => {
   const logs = await db.query(
     `SELECT message, user_id, created_at, first_name 
         FROM chatlog JOIN user ON user_id=user.id
-        WHERE chat_id=?`,
+        WHERE chat_id=? ORDER BY created_at`,
     { replacements: [chat.id], type: db.QueryTypes.SELECT }
   );
   const messages = logs.map(log => {

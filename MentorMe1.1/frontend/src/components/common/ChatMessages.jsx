@@ -1,52 +1,65 @@
 import React, { Component } from "react";
-
+import { formatRelative, formatDistance } from "date-fns";
 class ChatMessages extends Component {
-    state = {};
-    messagesEndRef = React.createRef();
+  state = {
+    minutes: 0
+  };
 
-    componentDidMount() {
-        this.scrollToBottom();
-    }
-    componentDidUpdate() {
-        this.scrollToBottom();
-    }
+  messagesEndRef = React.createRef();
 
-    scrollToBottom = () => {
-        this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    };
+  componentDidMount() {
+    this.interval = setInterval(() => this.tick(), 60000);
+    this.scrollToBottom();
+  }
 
-    renderMessages = messages => {
-        let counter = 0;
-        return messages.map(message => {
-            return (
-                <li key={counter++} className="clearfix">
-                    <div className="chat-body clearfix">
-                        <div className="header">
-                            <strong className="primary-font">
-                                {message.name}
-                            </strong>{" "}
-                            <small className="text-muted">
-                                <span className="glyphicon glyphicon-time"></span>
-                                {message.created_at}
-                            </small>
-                        </div>
-                        <p>{message.message}</p>
-                    </div>
-                </li>
-            );
-        });
-    };
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
 
-    render() {
-        return (
-            <div className="panel-body">
-                <ul className="chat">
-                    {this.renderMessages(this.props.messages)}
-                    <div ref={this.messagesEndRef} />
-                </ul>
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  tick = () => {
+    this.setState({ minutes: this.state.minutes + 1 });
+  };
+
+  scrollToBottom = () => {
+    this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  renderMessages = messages => {
+    let counter = 0;
+    return messages.map(message => {
+      return (
+        <li key={counter++} className="clearfix">
+          <div className="chat-body clearfix">
+            <div className="header">
+              <strong className="primary-font">{message.name}</strong>{" "}
+              <small className="text-muted">
+                <span className="glyphicon glyphicon-time"></span>
+                {formatDistance(new Date(message.created_at), new Date(), {
+                  addSuffix: true
+                })}
+              </small>
             </div>
-        );
-    }
+            <p>{message.message}</p>
+          </div>
+        </li>
+      );
+    });
+  };
+
+  render() {
+    return (
+      <div className="card-body">
+        <ul className="chat">
+          {this.renderMessages(this.props.messages)}
+          <div ref={this.messagesEndRef} />
+        </ul>
+      </div>
+    );
+  }
 }
 
 export default ChatMessages;
