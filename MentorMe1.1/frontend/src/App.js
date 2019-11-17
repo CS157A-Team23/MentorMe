@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import Connections from "./components/Connections";
 import io from "socket.io-client";
 import Login from './components/Login';
+import Topics from './components/Topics';
+import Profile from  './components/Profile';
+import NavBar from './components/NavBar';
+import Banner from './components/Banner';
 const socketURL = window.location.host;
 
 class App extends Component {
   state = {
     socket: io({ transports: ["websocket"] }),
-    loggedin: false
+    loggedin: false,
+    pageNumber: 0
   };
 
   constructor(props) {
@@ -27,12 +32,28 @@ class App extends Component {
     this.setState({loggedin:true});
   }
 
+  setPage = (pageNumber) => {
+    this.setState({pageNumber});
+  }
+
   renderMain() {
-    const { socket } = this.state;
+    const { socket, pageNumber } = this.state;
+    let display;
+    switch (pageNumber) {
+      case 0:
+        display=<Topics/>;
+        break;
+      case 1:
+        display=<Connections socket={socket} />;
+        break;
+      case 2:
+        display=<Profile/>;
+        break;
+    }
     return (
     <React.Fragment>
-      <div><Connections socket={socket} /></div>
-      <div></div>
+      <div>{display}</div>
+      <div><NavBar onSetPage={this.setPage}/></div>
     </React.Fragment>);
   }
   renderLogin() {

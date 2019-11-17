@@ -9,13 +9,21 @@ const USER_CONNECT = "USER_CONNECT";
 class Connections extends Component {
   state = {
     chats: [],
-    activeChat: null
+    activeChat: null,
+    events: []
   };
 
   //-------------------------------- LIFECYCLE HOOKS --------------------------------//
 
   componentDidMount() {
     this.initializeChatState();
+  }
+  componentWillUnmount() {
+    const {events} = this.state;
+    const {socket} = this.props;
+    events.forEach(event => {
+      socket.off(event);
+    });
   }
 
   //---------------------------- SOCKET SETUP & HANDLERS ------------------------------//
@@ -33,11 +41,12 @@ class Connections extends Component {
     );
     socket.on(ADD_CHAT, chat => {
       let newChats = [...this.state.chats, chat];
+      let newEvents  =[...this.state.events, `${MESSAGE_RECIEVE}-${chat.id}`];
       socket.on(
         `${MESSAGE_RECIEVE}-${chat.id}`,
         this.socketRecieverSetup(chat.id)
       );
-      this.setState({ chats: newChats });
+      this.setState({ chats: newChats, events: newEvents });
     });
   };
 
@@ -47,17 +56,19 @@ class Connections extends Component {
    * Loops through all chat objects and assigns a listener for those endpoints
    */
   initializationCallback = newChats => {
-    const { chats } = this.state;
+    const { events } = this.state;
     const { socket } = this.props;
     console.log("Initial chatlogs recieved");
     console.log(newChats);
+    const newEvents = [];
     newChats.forEach(chat => {
+      newEvents.push(`${MESSAGE_RECIEVE}-${chat.id}`);
       socket.on(
         `${MESSAGE_RECIEVE}-${chat.id}`,
         this.socketRecieverSetup(chat.id)
       );
     });
-    this.setState({ chats: newChats });
+    this.setState({ chats: newChats, events:[...events, ...newEvents] });
   };
 
   /**
