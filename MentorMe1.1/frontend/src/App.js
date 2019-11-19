@@ -7,6 +7,7 @@ import Profile from  './components/Profile';
 import NavBar from './components/NavBar';
 import Header from './components/Header';
 const socketURL = window.location.host;
+const USER_CONNECT = "USER_CONNECT";
 
 class App extends Component {
   state = {
@@ -17,7 +18,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-     // set own user token when login
+    // set own user token when login
   }
 
   componentDidMount() {
@@ -29,8 +30,9 @@ class App extends Component {
   }
 
   setLogin = () => {
-    this.setState({loggedin:true});
-  }
+    this.setState({ loggedin: true });
+    this.state.socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+  };
 
   setPage = (pageNumber, event) => {
     event.preventDefault();
@@ -42,13 +44,13 @@ class App extends Component {
     let display;
     switch (pageNumber) {
       case 0:
-        display=<Topics/>;
+        display = <Topics />;
         break;
       case 1:
-        display=<Connections socket={socket} />;
+        display = <Connections socket={socket} />;
         break;
       case 2:
-        display=<Profile/>;
+        display = <Profile />;
         break;
     }
     return (
@@ -58,15 +60,20 @@ class App extends Component {
     </React.Fragment>);
   }
   renderLogin() {
-    return <Login setLogin={this.setLogin}/>
+    return <div>
+      <Row>
+        <Col><Login setLogin={this.setLogin}/></Col>
+        <Col>SignUp</Col>
+      </Row>
+      </div>
   }
   // dont unmount chat manager, just set zindex to hide
   render() {
     return (
-      <React.Fragment> 
-      {this.state.loggedin ? this.renderMain() : this.renderLogin()}
+      <React.Fragment>
+        {this.state.loggedin ? this.renderMain() : this.renderLogin()}
       </React.Fragment>
-     );
+    );
   }
 }
 
