@@ -5,7 +5,7 @@ import Login from './components/Login';
 import Topics from './components/Topics';
 import Profile from  './components/Profile';
 import NavBar from './components/NavBar';
-import Banner from './components/Banner';
+import Header from './components/Header';
 const socketURL = window.location.host;
 
 class App extends Component {
@@ -52,6 +52,7 @@ class App extends Component {
     }
     return (
     <React.Fragment>
+      <div><Header/></div>
       <div>{display}</div>
       <div><NavBar onSetPage={this.setPage}/></div>
     </React.Fragment>);
