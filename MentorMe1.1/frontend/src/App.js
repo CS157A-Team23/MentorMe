@@ -10,6 +10,7 @@ import {Row, Col} from 'react-bootstrap';
 
 
 const socketURL = window.location.host;
+const USER_CONNECT = "USER_CONNECT";
 
 class App extends Component {
   state = {
@@ -20,7 +21,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-     // set own user token when login
+    // set own user token when login
   }
 
   componentDidMount() {
@@ -32,25 +33,26 @@ class App extends Component {
   }
 
   setLogin = () => {
-    this.setState({loggedin:true});
-  }
+    this.setState({ loggedin: true });
+    this.state.socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+  };
 
-  setPage = (pageNumber) => {
-    this.setState({pageNumber});
-  }
+  setPage = pageNumber => {
+    this.setState({ pageNumber });
+  };
 
   renderMain() {
     const { socket, pageNumber } = this.state;
     let display;
     switch (pageNumber) {
       case 0:
-        display=<Topics/>;
+        display = <Topics />;
         break;
       case 1:
-        display=<Connections socket={socket} />;
+        display = <Connections socket={socket} />;
         break;
       case 2:
-        display=<Profile/>;
+        display = <Profile />;
         break;
     }
     return (
@@ -71,10 +73,10 @@ class App extends Component {
   // dont unmount chat manager, just set zindex to hide
   render() {
     return (
-      <React.Fragment> 
-      {this.state.loggedin ? this.renderMain() : this.renderLogin()}
+      <React.Fragment>
+        {this.state.loggedin ? this.renderMain() : this.renderLogin()}
       </React.Fragment>
-     );
+    );
   }
 }
 

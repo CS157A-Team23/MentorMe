@@ -11,6 +11,8 @@ const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
 const MESSAGE_ERROR = "MESSAGE_ERROR";
 const ADD_CHAT = "ADD_CHAT";
 const USER_CONNECT = "USER_CONNECT";
+const GET_TOPIC_CHATLOG = "GET_TOPIC_CHATLOG";
+const GET_CHATLOGS = "GET_CHATLOGS";
 
 const connectedUsers = {};
 
@@ -23,7 +25,7 @@ module.exports = function(socket) {
    * User connects: Get jwt token to verify identity.
    * Return an array of chat objects with data included.
    */
-  socket.on(USER_CONNECT, (token, callback) => {
+  socket.on(USER_CONNECT, token => {
     console.log("Entered user connect");
     userInfo = authenticateUser(token);
     if (!userInfo) return;
@@ -31,6 +33,10 @@ module.exports = function(socket) {
       `Verified User | Socket: [${socket.id}] ID: [${userInfo.id}] Name: [${userInfo.first_name} ${userInfo.last_name}]`
     );
     connectedUsers[userInfo.id] = socket.id;
+  });
+
+  socket.on(GET_CHATLOGS, callback => {
+    if (!userInfo) return;
     getUserChats(userInfo).then(array => {
       console.log("Sending chatlogs to user");
       callback(array);
@@ -120,10 +126,20 @@ const generateChatlog = async (chat, id) => {
     `SELECT id, first_name, last_name, email FROM user WHERE id = ?`,
     { replacements: [otherId], plain: true }
   );
+  const relations = await db.query(
+    `SELECT name, asmentor FROM
+      (SELECT topic_id, false AS asmentor FROM mentors
+          WHERE chat_id=? AND mentor_id=? UNION
+       SELECT topic_id, true AS asmentor FROM mentors
+          WHERE chat_id=? AND mentee_id=?) u 
+      JOIN topic ON topic_id=topic.id;`,
+    { replacements: [chat.id, id, chat.id, id], type: db.QueryTypes.SELECT }
+  );
   return {
     id: chat.id,
     name: user.first_name,
-    messages
+    messages,
+    relations
   };
 };
 
