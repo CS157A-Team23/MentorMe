@@ -4,7 +4,6 @@ import io from "socket.io-client";
 import Login from './components/Login';
 import Topics from './components/Topics';
 import Profile from  './components/Profile';
-import NavBar from './components/NavBar';
 import Header from './components/Header';
 const socketURL = window.location.host;
 const USER_CONNECT = "USER_CONNECT";
@@ -34,8 +33,7 @@ class App extends Component {
     this.state.socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
   };
 
-  setPage = (pageNumber, event) => {
-    event.preventDefault();
+  setPage = (pageNumber) => {
     this.setState({pageNumber});
   }
 
@@ -61,10 +59,10 @@ class App extends Component {
   }
   renderLogin() {
     return <div>
-      <Row>
-        <Col><Login setLogin={this.setLogin}/></Col>
-        <Col>SignUp</Col>
-      </Row>
+      <div className="row">
+        <div className="col"><Login setLogin={this.setLogin}/></div>
+        <div className="col">SignUp</div>
+      </div>
       </div>
   }
   // dont unmount chat manager, just set zindex to hide
