@@ -32,7 +32,8 @@ class App extends Component {
     this.setState({loggedin:true});
   }
 
-  setPage = (pageNumber) => {
+  setPage = (pageNumber, event) => {
+    event.preventDefault();
     this.setState({pageNumber});
   }
 
@@ -52,9 +53,8 @@ class App extends Component {
     }
     return (
     <React.Fragment>
-      <div><Header/></div>
+      <div><Header onSetPage={this.setPage}/></div>
       <div>{display}</div>
-      <div><NavBar onSetPage={this.setPage}/></div>
     </React.Fragment>);
   }
   renderLogin() {

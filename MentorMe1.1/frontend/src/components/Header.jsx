@@ -1,16 +1,14 @@
 import React, { Component } from "react";
+import {Row, Col} from "react-bootstrap";
 
-class Header extends Component {
-
-    render(){
-        return (<nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">MentorMe</a>
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </nav>);
-    }
+const Header = (props) => {
+    const {onSetPage} = props;
+    return (<nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <a className="navbar-brand" href="#">MentorMe</a>
+        <button className = "text-center btn btn-outline-primary mx-2"  onClick={(e)=>onSetPage(0, e)}>Topics</button>
+  	    <button className = "text-center btn btn-outline-primary mx-2"  onClick={(e)=>onSetPage(1, e)}>Connects</button>
+  		<button className = "text-center btn btn-outline-primary mx-2"  onClick={(e)=>onSetPage(2, e)}>Profile</button>
+    </nav>);
 }
 
 export default Header
