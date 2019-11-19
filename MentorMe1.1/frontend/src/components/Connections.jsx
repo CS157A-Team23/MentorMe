@@ -4,8 +4,8 @@ const MESSAGE_SEND = "MESSAGE_SEND";
 const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
 const MESSAGE_ERROR = "MESSAGE_ERROR";
 const ADD_CHAT = "ADD_CHAT";
-const USER_CONNECT = "USER_CONNECT";
 
+const GET_CHATLOGS = "GET_CHATLOGS";
 class Connections extends Component {
   state = {
     chats: [],
@@ -26,11 +26,7 @@ class Connections extends Component {
    */
   initializeChatState = () => {
     const { socket } = this.props;
-    socket.emit(
-      USER_CONNECT,
-      sessionStorage.getItem("authToken"),
-      this.initializationCallback
-    );
+    socket.emit(GET_CHATLOGS, this.initializationCallback);
     socket.on(ADD_CHAT, chat => {
       let newChats = [...this.state.chats, chat];
       socket.on(

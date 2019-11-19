@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Connections from "./components/Connections";
 import io from "socket.io-client";
-import Login from './components/Login';
+import Login from "./components/Login";
 const socketURL = window.location.host;
+const USER_CONNECT = "USER_CONNECT";
 
 class App extends Component {
   state = {
@@ -12,7 +13,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-     // set own user token when login
+    // set own user token when login
   }
 
   componentDidMount() {
@@ -24,27 +25,31 @@ class App extends Component {
   }
 
   setLogin = () => {
-    this.setState({loggedin:true});
-  }
+    this.setState({ loggedin: true });
+    this.state.socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+  };
 
   renderMain() {
     const { socket } = this.state;
     return (
-    <React.Fragment>
-      <div><Connections socket={socket} /></div>
-      <div></div>
-    </React.Fragment>);
+      <React.Fragment>
+        <div>
+          <Connections socket={socket} />
+        </div>
+        <div></div>
+      </React.Fragment>
+    );
   }
   renderLogin() {
-    return <Login setLogin={this.setLogin}/>
+    return <Login setLogin={this.setLogin} />;
   }
   // dont unmount chat manager, just set zindex to hide
   render() {
     return (
-      <React.Fragment> 
-      {this.state.loggedin ? this.renderMain() : this.renderLogin()}
+      <React.Fragment>
+        {this.state.loggedin ? this.renderMain() : this.renderLogin()}
       </React.Fragment>
-     );
+    );
   }
 }
 
