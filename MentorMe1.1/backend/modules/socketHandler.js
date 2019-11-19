@@ -126,10 +126,20 @@ const generateChatlog = async (chat, id) => {
     `SELECT id, first_name, last_name, email FROM user WHERE id = ?`,
     { replacements: [otherId], plain: true }
   );
+  const relations = await db.query(
+    `SELECT name, asmentor FROM
+      (SELECT topic_id, false AS asmentor FROM mentors
+          WHERE chat_id=? AND mentor_id=? UNION
+       SELECT topic_id, true AS asmentor FROM mentors
+          WHERE chat_id=? AND mentee_id=?) u 
+      JOIN topic ON topic_id=topic.id;`,
+    { replacements: [chat.id, id, chat.id, id], type: db.QueryTypes.SELECT }
+  );
   return {
     id: chat.id,
     name: user.first_name,
-    messages
+    messages,
+    relations
   };
 };
 

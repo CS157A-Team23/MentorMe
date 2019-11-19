@@ -190,6 +190,13 @@ class Connections extends Component {
               }
             >
               {chat.name}
+              <div className="w-100"></div>
+              {chat.relations.map(rel => (
+                <span class="badge badge-info">
+                  {rel.name}
+                  {rel.asmentor ? " Mentor" : " Mentee"}
+                </span>
+              ))}
             </li>
           ))}
         </ul>
