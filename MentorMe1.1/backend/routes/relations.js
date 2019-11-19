@@ -32,7 +32,7 @@ router.get("/pending", auth, async (req, res) => {
 router.post("/set", auth, async (req, res) => {
   // need other user, topic,
   const { error } = validateMent(req.body);
-  if (error) res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
   const { id: targetid, topicid, asmentor } = req.body;
   if (targetid === req.user.id)
     return res.status(400).send("Cannot target self");
@@ -136,9 +136,9 @@ router.post("/set", auth, async (req, res) => {
  * Remove a relation
  * {"id","topicid","asmentor"}
  */
-router.post("/remove", auth, async (req, res) => {
+router.post("/refuse", auth, async (req, res) => {
   const { error } = validateMent(req.body);
-  if (error) res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
   const { id: targetid, topicid, asmentor } = req.body;
   if (targetid === req.user.id)
     return res.status(400).send("Cannot target self");

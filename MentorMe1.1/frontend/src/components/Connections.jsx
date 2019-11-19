@@ -1,26 +1,38 @@
 import React, { Component } from "react";
 import ChatContainer from "./common/ChatContainer";
+import axios from "axios";
+import _ from "lodash";
 const MESSAGE_SEND = "MESSAGE_SEND";
 const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
 const MESSAGE_ERROR = "MESSAGE_ERROR";
 const ADD_CHAT = "ADD_CHAT";
-
 const GET_CHATLOGS = "GET_CHATLOGS";
+
 class Connections extends Component {
   state = {
     chats: [],
     activeChat: null,
-    events: []
+    events: [],
+    pending: []
   };
 
   //-------------------------------- LIFECYCLE HOOKS --------------------------------//
 
   componentDidMount() {
     this.initializeChatState();
+    axios
+      .get("/api/relations/pending", {
+        headers: { "x-auth-token": sessionStorage.getItem("authToken") }
+      })
+      .then(res => {
+        console.log(res.data);
+        this.setState({ pending: res.data });
+      })
+      .catch(err => console.log(err.message));
   }
   componentWillUnmount() {
-    const {events} = this.state;
-    const {socket} = this.props;
+    const { events } = this.state;
+    const { socket } = this.props;
     events.forEach(event => {
       socket.off(event);
     });
@@ -35,15 +47,17 @@ class Connections extends Component {
   initializeChatState = () => {
     const { socket } = this.props;
     socket.emit(GET_CHATLOGS, this.initializationCallback);
+
     socket.on(ADD_CHAT, chat => {
       let newChats = [...this.state.chats, chat];
-      let newEvents  =[...this.state.events, `${MESSAGE_RECIEVE}-${chat.id}`];
+      let newEvents = [...this.state.events, `${MESSAGE_RECIEVE}-${chat.id}`];
       socket.on(
         `${MESSAGE_RECIEVE}-${chat.id}`,
         this.socketRecieverSetup(chat.id)
       );
       this.setState({ chats: newChats, events: newEvents });
     });
+    this.setState({ events: [...this.state.events, ADD_CHAT] });
   };
 
   /**
@@ -64,7 +78,7 @@ class Connections extends Component {
         this.socketRecieverSetup(chat.id)
       );
     });
-    this.setState({ chats: newChats, events:[...events, ...newEvents] });
+    this.setState({ chats: newChats, events: [...events, ...newEvents] });
   };
 
   /**
@@ -99,6 +113,41 @@ class Connections extends Component {
     this.props.socket.emit(MESSAGE_SEND, chatid, message);
   };
 
+  handleConfirmPending = rel => {
+    axios
+      .post(
+        "/api/relations/set",
+        {
+          id: rel.id,
+          topicid: rel.topicid,
+          asmentor: Boolean(rel.asmentor)
+        },
+        { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
+      )
+      .then(res => {
+        const pending = this.state.pending.filter(obj => !_.isEqual(obj, rel));
+        this.setState({ pending });
+      })
+      .catch(err => console.log(err.message));
+  };
+  handleRefusePending = rel => {
+    axios
+      .post(
+        "/api/relations/refuse",
+        {
+          id: rel.id,
+          topicid: rel.topicid,
+          asmentor: Boolean(rel.asmentor)
+        },
+        { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
+      )
+      .then(res => {
+        const pending = this.state.pending.filter(obj => !_.isEqual(obj, rel));
+        this.setState({ pending });
+      })
+      .catch(err => console.log(err.message));
+  };
+
   //-------------------------------- RENDER FUNCTIONS --------------------------------//
 
   renderChatContainer() {
@@ -126,7 +175,6 @@ class Connections extends Component {
 
   renderConnectionList() {
     const { chats, activeChat } = this.state;
-    const { socket } = this.props;
 
     return (
       <React.Fragment>
@@ -149,6 +197,39 @@ class Connections extends Component {
     );
   }
 
+  renderPending() {
+    const { pending } = this.state;
+    let count = 0;
+
+    return (
+      <React.Fragment>
+        <ul className="list-group">
+          {pending.map(p => (
+            <li key={++count} className="list-group-item">
+              {p.first_name + " " + p.last_name}
+              <span class="badge badge-info">
+                {p.asmentor ? "Mentor" : "Mentee"}
+              </span>
+              <div />
+              <button
+                onClick={() => this.handleConfirmPending(p)}
+                className="btn btn-primary"
+              >
+                Connect
+              </button>
+              <button
+                onClick={() => this.handleRefusePending(p)}
+                className="btn btn-warning"
+              >
+                Refuse
+              </button>
+            </li>
+          ))}
+        </ul>
+      </React.Fragment>
+    );
+  }
+
   render() {
     return (
       <div className="container">
@@ -157,7 +238,10 @@ class Connections extends Component {
             <h3>Connections</h3>
             {this.renderChatContainer()}
           </div>
-          <div className="col-3">{this.renderConnectionList()}</div>
+          <div className="col-3">
+            {this.renderConnectionList()}
+            {this.renderPending()}
+          </div>
         </div>
       </div>
     );
