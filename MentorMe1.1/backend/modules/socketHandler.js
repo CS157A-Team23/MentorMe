@@ -1,10 +1,6 @@
 const io = require("../app").io;
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const _ = require("lodash");
-const { Chat } = require("../models/Chat");
-const { Chatlog } = require("../models/Chatlog");
-const { User } = require("../models/User");
 const db = require("../modules/database");
 const MESSAGE_SEND = "MESSAGE_SEND";
 const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
@@ -13,7 +9,7 @@ const ADD_CHAT = "ADD_CHAT";
 const USER_CONNECT = "USER_CONNECT";
 const GET_TOPIC_CHATLOG = "GET_TOPIC_CHATLOG";
 const GET_CHATLOGS = "GET_CHATLOGS";
-
+const ATTEMPT_RECONNECT = "ATTEMPT_RECONNECT";
 const connectedUsers = {};
 
 module.exports = function(socket) {
@@ -21,13 +17,14 @@ module.exports = function(socket) {
 
   let userInfo; // stores decoded JWT Token info
 
+  socket.emit(ATTEMPT_RECONNECT);
   /**
    * User connects: Get jwt token to verify identity.
    * Return an array of chat objects with data included.
    */
   socket.on(USER_CONNECT, token => {
     console.log("Entered user connect");
-    userInfo = authenticateUser(token);
+    if (!userInfo) userInfo = authenticateUser(token);
     if (!userInfo) return;
     console.log(
       `Verified User | Socket: [${socket.id}] ID: [${userInfo.id}] Name: [${userInfo.first_name} ${userInfo.last_name}]`
@@ -51,6 +48,7 @@ module.exports = function(socket) {
   socket.on(MESSAGE_SEND, (chatid, message) => {
     console.log("MESSAGE_SEND entered");
     if (!userInfo) {
+      console.log("No user info")
       socket.emit(MESSAGE_ERROR, "User not verified");
       return;
     }
@@ -159,13 +157,24 @@ function authenticateUser(token) {
 /**
  * Alerts online users if a new chat is added.
  */
-function alertNewChat(userid, chatid, chatname) {
+async function alertNewChat(userid, chatid, chatname) {
   console.log(userid, chatid, chatname);
   if (connectedUsers[userid]) {
+    console.log("user is online");
+    const relations = await db.query(
+      `SELECT name, asmentor FROM
+        (SELECT topic_id, false AS asmentor FROM mentors
+            WHERE chat_id=? AND mentor_id=? UNION
+         SELECT topic_id, true AS asmentor FROM mentors
+            WHERE chat_id=? AND mentee_id=?) u 
+        JOIN topic ON topic_id=topic.id;`,
+      { replacements: [chatid, userid, chatid, userid], type: db.QueryTypes.SELECT }
+    );
     io.to(connectedUsers[userid]).emit(ADD_CHAT, {
       id: chatid,
       name: chatname,
-      messages: []
+      messages: [],
+      relations
     });
   }
 }

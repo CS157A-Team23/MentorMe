@@ -7,6 +7,7 @@ import Profile from  './components/Profile';
 import Header from './components/Header';
 const socketURL = window.location.host;
 const USER_CONNECT = "USER_CONNECT";
+const ATTEMPT_RECONNECT = "ATTEMPT_RECONNECT";
 
 class App extends Component {
   state = {
@@ -26,6 +27,19 @@ class App extends Component {
     socket.on("connect", () => {
       console.log("connected");
     });
+    // if backend server resets, reconnect to it
+    socket.on(ATTEMPT_RECONNECT, () => {
+      const authToken = sessionStorage.getItem("authToken");
+      if (authToken) {
+        socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+        console.log("reconnecting user");
+      }
+    });
+    // if session still live, log in automatically
+    const authToken = sessionStorage.getItem("authToken");
+    if (authToken) {
+      this.setState({loggedin:true});
+    }
   }
 
   setLogin = () => {

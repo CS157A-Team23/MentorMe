@@ -107,7 +107,9 @@ router.post("/set", auth, async (req, res) => {
         plain: true
       }
     );
+    let newChat = false;
     if (!chat) {
+      newChat = true;
       const [chatid, success] = await db.query(
         `INSERT INTO chat(user1_id, user2_id)
                 VALUES(?,?)`,
@@ -116,8 +118,6 @@ router.post("/set", auth, async (req, res) => {
           type: db.QueryTypes.INSERT
         }
       );
-      alertNewChat(req.user.id, chatid, user.first_name);
-      alertNewChat(user.id, chatid, req.user.first_name);
       chat = { id: chatid };
     }
     await db.query(
@@ -128,6 +128,11 @@ router.post("/set", auth, async (req, res) => {
         type: db.QueryTypes.UPDATE
       }
     );
+    if (newChat) {
+      alertNewChat(req.user.id, chat.id, user.first_name);
+      alertNewChat(user.id, chat.id, req.user.first_name);
+    }
+    
   }
   res.send("connection sent");
 });
