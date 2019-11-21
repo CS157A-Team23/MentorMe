@@ -52,6 +52,24 @@ class TopicChat extends Component {
     console.log(chat.id, message);
     this.props.socket.emit(MESSAGE_SEND, chat.id, message);
   };
+  renderStars = (filled, max) => {
+    const ratio = filled / max;
+    let color = "orange";
+    if (ratio <= 0.2) {
+      color = "red";
+    } else if (ratio >= 0.6) {
+      color = "green";
+    }
+    const hearts = [];
+    for (let i = 1; i <= max; i++) {
+      if (i <= filled) {
+        hearts.push(<i className="fa fa-circle" style={{ color }}></i>);
+      } else {
+        hearts.push(<i className="fa fa-circle-o"></i>);
+      }
+    }
+    return <span className="ml-1">{hearts}</span>;
+  };
 
   renderMembers() {
     const { members } = this.state;
@@ -61,6 +79,7 @@ class TopicChat extends Component {
           return mem.id != sessionStorage.getItem("id") ? (
             <li key={mem.id} className="list-group-item">
               {mem.first_name + " " + mem.last_name}
+              {this.renderStars(mem.skill ? mem.skill : 0, 5)}
             </li>
           ) : null;
         })}
