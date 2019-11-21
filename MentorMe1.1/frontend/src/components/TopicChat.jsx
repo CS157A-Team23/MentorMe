@@ -9,7 +9,8 @@ class TopicChat extends Component {
   state = {
     chat: null,
     event: null,
-    members: []
+    members: [],
+    activeMember: null
   };
 
   componentDidMount() {
@@ -52,6 +53,28 @@ class TopicChat extends Component {
     console.log(chat.id, message);
     this.props.socket.emit(MESSAGE_SEND, chat.id, message);
   };
+
+  handleActivateMember = mem => {
+    const { activeMember } = this.state;
+    if (mem === activeMember) {
+      this.setState({ activeMember: null });
+    } else {
+      this.setState({ activeMember: mem });
+    }
+  };
+  handleRequest = (mem, asmentor) => {
+    axios.post(
+      "/api/relations/set",
+      {
+        id: mem.id,
+        topicid: this.props.topicid,
+        asmentor
+      },
+      { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
+    );
+    this.setState({ activeMember: null });
+  };
+
   renderStars = (filled, max) => {
     const ratio = filled / max;
     let color = "orange";
@@ -72,14 +95,35 @@ class TopicChat extends Component {
   };
 
   renderMembers() {
-    const { members } = this.state;
+    const { members, activeMember } = this.state;
     return (
       <ul className="list-group">
         {members.map(mem => {
           return mem.id != sessionStorage.getItem("id") ? (
-            <li key={mem.id} className="list-group-item">
+            <li
+              onClick={() => this.handleActivateMember(mem)}
+              key={mem.id}
+              className="list-group-item"
+            >
               {mem.first_name + " " + mem.last_name}
               {this.renderStars(mem.skill ? mem.skill : 0, 5)}
+              {activeMember === mem ? (
+                <React.Fragment>
+                  <div className="w-100" />
+                  <button
+                    className="text-center btn btn-outline-primary mx-1"
+                    onClick={() => this.handleRequest(mem, true)}
+                  >
+                    Request Mentor
+                  </button>
+                  <button
+                    className="text-center btn btn-outline-primary mx-1"
+                    onClick={() => this.handleRequest(mem, false)}
+                  >
+                    Request Mentee
+                  </button>
+                </React.Fragment>
+              ) : null}
             </li>
           ) : null;
         })}

@@ -24,7 +24,7 @@ class Topics extends Component {
           </button>
         </form>
         <div className="w-100" />
-        <TopicChat socket={socket} topicid={topicid} />
+        {/* <TopicChat socket={socket} topicid={topicid} /> */}
       </React.Fragment>
     );
   }
