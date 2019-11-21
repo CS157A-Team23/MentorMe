@@ -18,7 +18,6 @@ class Connections extends Component {
   //-------------------------------- LIFECYCLE HOOKS --------------------------------//
 
   componentDidMount() {
-    console.log("check login send");
     this.initializeChatState();
     axios
       .get("/api/relations/pending", {
@@ -192,7 +191,7 @@ class Connections extends Component {
               {chat.name}
               <div className="w-100"></div>
               {chat.relations.map(rel => (
-                <span key={rel.name+rel.asmentor}class="badge badge-info">
+                <span key={rel.name + rel.asmentor} class="badge badge-info">
                   {rel.name}
                   {rel.asmentor ? " Mentor" : " Mentee"}
                 </span>
