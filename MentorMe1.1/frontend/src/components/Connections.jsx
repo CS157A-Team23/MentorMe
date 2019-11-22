@@ -7,7 +7,6 @@ const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
 const MESSAGE_ERROR = "MESSAGE_ERROR";
 const ADD_CHAT = "ADD_CHAT";
 const GET_CHATLOGS = "GET_CHATLOGS";
-
 class Connections extends Component {
   state = {
     chats: [],
@@ -192,7 +191,7 @@ class Connections extends Component {
               {chat.name}
               <div className="w-100"></div>
               {chat.relations.map(rel => (
-                <span class="badge badge-info">
+                <span key={rel.name + rel.asmentor} class="badge badge-info">
                   {rel.name}
                   {rel.asmentor ? " Mentor" : " Mentee"}
                 </span>

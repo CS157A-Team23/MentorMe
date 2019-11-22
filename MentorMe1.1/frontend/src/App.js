@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import Connections from "./components/Connections";
 import io from "socket.io-client";
-import Login from './components/Login';
-import Topics from './components/Topics';
-import Profile from  './components/Profile';
-import Header from './components/Header';
+import Login from "./components/Login";
+import Topics from "./components/Topics";
+import Profile from "./components/Profile";
+import Header from "./components/Header";
 const socketURL = window.location.host;
 const USER_CONNECT = "USER_CONNECT";
+const ATTEMPT_RECONNECT = "ATTEMPT_RECONNECT";
 
 class App extends Component {
   state = {
@@ -15,34 +16,41 @@ class App extends Component {
     pageNumber: 0
   };
 
-  constructor(props) {
-    super(props);
-    // set own user token when login
-  }
-
   componentDidMount() {
-    const { socket } = this.state;
-    console.log(socketURL);
+    const { socket, loggedin } = this.state;
     socket.on("connect", () => {
       console.log("connected");
     });
+    // if backend server resets, reconnect to it
+    socket.on(ATTEMPT_RECONNECT, () => {
+      const authToken = sessionStorage.getItem("authToken");
+      if (authToken) {
+        socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+        console.log("reconnecting user");
+      }
+    });
+    // if session still live, log in automatically
+    const authToken = sessionStorage.getItem("authToken");
+    if (authToken) {
+      this.setLogin();
+    }
   }
 
   setLogin = () => {
-    this.setState({ loggedin: true });
     this.state.socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+    this.setState({ loggedin: true });
   };
 
-  setPage = (pageNumber) => {
-    this.setState({pageNumber});
-  }
+  setPage = pageNumber => {
+    this.setState({ pageNumber });
+  };
 
   renderMain() {
     const { socket, pageNumber } = this.state;
     let display;
     switch (pageNumber) {
       case 0:
-        display = <Topics />;
+        display = <Topics socket={socket} />;
         break;
       case 1:
         display = <Connections socket={socket} />;
@@ -52,18 +60,25 @@ class App extends Component {
         break;
     }
     return (
-    <React.Fragment>
-      <div><Header onSetPage={this.setPage}/></div>
-      <div>{display}</div>
-    </React.Fragment>);
+      <React.Fragment>
+        <div>
+          <Header onSetPage={this.setPage} />
+        </div>
+        <div>{display}</div>
+      </React.Fragment>
+    );
   }
   renderLogin() {
-    return <div>
-      <div className="row">
-        <div className="col"><Login setLogin={this.setLogin}/></div>
-        <div className="col">SignUp</div>
+    return (
+      <div>
+        <div className="row">
+          <div className="col">
+            <Login setLogin={this.setLogin} />
+          </div>
+          <div className="col">SignUp</div>
+        </div>
       </div>
-      </div>
+    );
   }
   // dont unmount chat manager, just set zindex to hide
   render() {
