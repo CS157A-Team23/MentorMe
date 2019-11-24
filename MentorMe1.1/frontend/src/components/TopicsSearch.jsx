@@ -2,25 +2,31 @@ import React, { Component } from 'react';
 import Card from './Card';
 import {Container} from 'react-bootstrap'
 
+const title_style = {
+    padding: 20
+}
 
 class TopicsSearch extends Component {
+    
+    
     state = {  }
     
     renderCards = function(){
-        const {data, loaded} = this.props;
+        const {data, loaded, onSetTopic} = this.props;
         const rows = [];
         for (let i = 0; i < data.length; i+=2){
             if (i + 1 >= data.length){
                 rows.push(
-                    <div className="row">
-                        <div className="col"><Card name={data[i].name}/></div>
+                    <div className="row" style={title_style}>
+                        <div className="col"><Card name={data[i].name} onClick={() => onSetTopic(data[i].topicid)}/></div>
                     </div>);
             }
             else{
                 rows.push(
-                <div className="row">
-                    <div className="col"><Card name={data[i].name}/></div>
-                    <div className="col"><Card name={data[i+1].name}/></div>
+                <div className="row" style={title_style}>
+                    <div className="col"><Card name={data[i].name} onClick={() => onSetTopic(data[i].topicid)}/></div>
+                    <div className="col"><Card name={data[i+1].name} onClick={() => onSetTopic(data[i+1].topicid)}/></div>
+                    
                 </div>);
             }
         }

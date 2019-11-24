@@ -1,25 +1,18 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Image, Button} from 'react-bootstrap'
 import axios from 'axios';
 
 
-const title_style = {
-  padding: 20,
-  backgroundColor: '#1111',
-}
 
  const Card = (props) => {
-        const {name} = props;
+        const {name, onClick} = props;
         return (
-            <Container className = 'fluid border border-1 border-dark'>  
+            <div className = 'card jumbotron text-center btn-outline-primary mx-2'>  
              <React.Fragment>
-             <div className='row title' style = {title_style}>
-                <div className="col" xs = {8}>
+                <div className="col" onClick={onClick}>
                   <div><h2>{name}</h2></div>
-                </div>
               </div>
              </React.Fragment>  
-          </Container>
+          </div>
       );
 };
 

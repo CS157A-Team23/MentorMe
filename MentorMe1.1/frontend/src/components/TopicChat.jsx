@@ -14,7 +14,7 @@ class TopicChat extends Component {
   };
 
   componentDidMount() {
-    const { socket, topicid } = this.props;
+    const { socket, topicid, setBack} = this.props;
     socket.emit(GET_TOPIC_CHATLOG, topicid, this.initializationCallback);
     axios
       .get(`/api/topics/${topicid}/members`)

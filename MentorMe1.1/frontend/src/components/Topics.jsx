@@ -8,7 +8,14 @@ import TopicChat from "./TopicChat";
 class Topics extends Component {
     state ={
         data:[],
-        loaded:false
+        loaded:false,
+        activeID:null
+    }
+    
+
+
+    handleSetTopic= (topicid)=>{
+        this.setState({activeID:topicid});
     }
 
     componentDidMount() {
@@ -22,12 +29,13 @@ class Topics extends Component {
     }
 
     render(){
-        const {data, loaded} = this.state;
+        const {data, loaded, activeID} = this.state;
         const { socket } = this.props;
-        const topicid = 1;
         return (
         <React.Fragment>
-            <TopicsSearch data={data} loaded={loaded}></TopicsSearch>
+            {activeID?<TopicChat socket={socket} topicid={activeID}/> 
+            :<TopicsSearch data={data} loaded={loaded} onSetTopic={id=>this.handleSetTopic(id)}></TopicsSearch>}
+            
             {/* <TopicChat socket={socket} topicid={topicid} /> */}
         </React.Fragment>
             
