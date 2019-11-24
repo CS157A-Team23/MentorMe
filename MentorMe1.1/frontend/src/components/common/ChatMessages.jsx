@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { formatRelative, formatDistance } from "date-fns";
+import { formatDistance } from "date-fns";
 class ChatMessages extends Component {
   state = {
     minutes: 0

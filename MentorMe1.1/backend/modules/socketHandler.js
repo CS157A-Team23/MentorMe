@@ -40,6 +40,14 @@ module.exports = function(socket) {
     });
   });
 
+  socket.on(GET_TOPIC_CHATLOG, (topicid, callback) => {
+    if (!userInfo) return;
+    getTopicChat(topicid, userInfo.id).then(chat => {
+      console.log("sending topic chat to user");
+      callback(chat);
+    });
+  });
+
   /**
    * User sends message: Log the message in the database.
    * Reformat the message so only those listening on those chats can catch.
@@ -48,7 +56,7 @@ module.exports = function(socket) {
   socket.on(MESSAGE_SEND, (chatid, message) => {
     console.log("MESSAGE_SEND entered");
     if (!userInfo) {
-      console.log("No user info")
+      console.log("No user info");
       socket.emit(MESSAGE_ERROR, "User not verified");
       return;
     }
@@ -85,7 +93,36 @@ module.exports = function(socket) {
   });
 };
 
-async function getTopicChat(topidid) {}
+async function getTopicChat(topidid, id) {
+  // return { id, name, messages}
+  const chat = await db.query(
+    `SELECT chat.id AS id, topic.name AS name
+     FROM chat JOIN topic ON topic_id = topic.id 
+     WHERE topic_id=?`,
+    {
+      replacements: [topidid],
+      plain: true
+    }
+  );
+  const logs = await db.query(
+    `SELECT message, user_id, created_at, first_name 
+        FROM chatlog JOIN user ON user_id=user.id
+        WHERE chat_id=? ORDER BY created_at`,
+    { replacements: [chat.id], type: db.QueryTypes.SELECT }
+  );
+  const messages = logs.map(log => {
+    return {
+      message: log.message,
+      name: log.user_id === id ? "Me" : log.first_name,
+      created_at: log.created_at
+    };
+  });
+  return {
+    id: chat.id,
+    name: chat.name,
+    messages
+  };
+}
 
 /**
  * Gets an array of chat data objects.
@@ -118,7 +155,6 @@ const generateChatlog = async (chat, id) => {
       created_at: log.created_at
     };
   });
-  let name;
   const otherId = chat.user1_id === id ? chat.user2_id : chat.user1_id;
   const user = await db.query(
     `SELECT id, first_name, last_name, email FROM user WHERE id = ?`,
@@ -168,7 +204,10 @@ async function alertNewChat(userid, chatid, chatname) {
          SELECT topic_id, true AS asmentor FROM mentors
             WHERE chat_id=? AND mentee_id=?) u 
         JOIN topic ON topic_id=topic.id;`,
-      { replacements: [chatid, userid, chatid, userid], type: db.QueryTypes.SELECT }
+      {
+        replacements: [chatid, userid, chatid, userid],
+        type: db.QueryTypes.SELECT
+      }
     );
     io.to(connectedUsers[userid]).emit(ADD_CHAT, {
       id: chatid,

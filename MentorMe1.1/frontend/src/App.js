@@ -17,14 +17,8 @@ class App extends Component {
     pageNumber: 0
   };
 
-  constructor(props) {
-    super(props);
-    // set own user token when login
-  }
-
   componentDidMount() {
-    const { socket } = this.state;
-    console.log(socketURL);
+    const { socket, loggedin } = this.state;
     socket.on("connect", () => {
       console.log("connected");
     });
@@ -39,25 +33,25 @@ class App extends Component {
     // if session still live, log in automatically
     const authToken = sessionStorage.getItem("authToken");
     if (authToken) {
-      this.setState({loggedin:true});
+      this.setLogin();
     }
   }
 
   setLogin = () => {
-    this.setState({ loggedin: true });
     this.state.socket.emit(USER_CONNECT, sessionStorage.getItem("authToken"));
+    this.setState({ loggedin: true });
   };
 
-  setPage = (pageNumber) => {
-    this.setState({pageNumber});
-  }
+  setPage = pageNumber => {
+    this.setState({ pageNumber });
+  };
 
   renderMain() {
     const { socket, pageNumber } = this.state;
     let display;
     switch (pageNumber) {
       case 0:
-        display = <Topics />;
+        display = <Topics socket={socket} />;
         break;
       case 1:
         display = <Connections socket={socket} />;
@@ -67,18 +61,22 @@ class App extends Component {
         break;
     }
     return (
-    <React.Fragment>
-      <div><Header onSetPage={this.setPage}/></div>
-      <div>{display}</div>
-    </React.Fragment>);
+      <React.Fragment>
+        <div>
+          <Header onSetPage={this.setPage} />
+        </div>
+        <div>{display}</div>
+      </React.Fragment>
+    );
   }
   renderLogin() {
-    return <div>
+    return (<div>
       <div className="row">
         <div className="col"><Login setLogin={this.setLogin}/></div>
         <div className="col"><SignUp setLogin={this.setLogin}></SignUp></div>
       </div>
       </div>
+    );
   }
   // dont unmount chat manager, just set zindex to hide
   render() {
