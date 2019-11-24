@@ -41,11 +41,11 @@ const User = db.define(
 function validateUser(user) {
     const schema = Joi.object({
         first_name: Joi.string()
-            .min(3)
+            .min(2)
             .max(50)
             .required(),
         last_name: Joi.string()
-            .min(3)
+            .min(2)
             .max(50)
             .required(),
         email: Joi.string()

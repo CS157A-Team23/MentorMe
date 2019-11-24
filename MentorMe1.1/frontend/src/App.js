@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Topics from './components/Topics';
 import Profile from  './components/Profile';
 import Header from './components/Header';
+import SignUp from './components/signUp';
 const socketURL = window.location.host;
 const USER_CONNECT = "USER_CONNECT";
 const ATTEMPT_RECONNECT = "ATTEMPT_RECONNECT";
@@ -75,7 +76,7 @@ class App extends Component {
     return <div>
       <div className="row">
         <div className="col"><Login setLogin={this.setLogin}/></div>
-        <div className="col">SignUp</div>
+        <div className="col"><SignUp setLogin={this.setLogin}></SignUp></div>
       </div>
       </div>
   }
