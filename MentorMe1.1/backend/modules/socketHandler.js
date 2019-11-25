@@ -169,11 +169,17 @@ const generateChatlog = async (chat, id) => {
       JOIN topic ON topic_id=topic.id;`,
     { replacements: [chat.id, id, chat.id, id], type: db.QueryTypes.SELECT }
   );
+  const r = await db.query(
+    `SELECT rating FROM rates
+    WHERE rater_id=? AND ratee_id=?`,
+    { replacements: [id, otherId], plain: true }
+  );
   return {
     id: chat.id,
     name: user.first_name,
     messages,
-    relations
+    relations,
+    rating: r ? r.rating : null
   };
 };
 
@@ -209,11 +215,17 @@ async function alertNewChat(userid, chatid, chatname) {
         type: db.QueryTypes.SELECT
       }
     );
+    const r = await db.query(
+      `SELECT rating FROM rates
+      WHERE rater_id=? AND ratee_id=?`,
+      { replacements: [id, otherId], plain: true }
+    );
     io.to(connectedUsers[userid]).emit(ADD_CHAT, {
       id: chatid,
       name: chatname,
       messages: [],
-      relations
+      relations,
+      rating: r ? r.rating : null
     });
   }
 }
