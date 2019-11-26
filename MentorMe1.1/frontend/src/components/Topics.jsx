@@ -33,7 +33,7 @@ class Topics extends Component {
         const { socket } = this.props;
         return (
         <React.Fragment>
-            {activeID?<TopicChat socket={socket} topicid={activeID}/> 
+            {activeID?<TopicChat socket={socket} topicid={activeID} onSetTopic={id=>this.handleSetTopic(id)}/> 
             :<TopicsSearch data={data} loaded={loaded} onSetTopic={id=>this.handleSetTopic(id)}></TopicsSearch>}
             
             {/* <TopicChat socket={socket} topicid={topicid} /> */}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Card from './Card';
-import {Container} from 'react-bootstrap'
+import {Container, FormGroup, FormControl, Button} from 'react-bootstrap';
+import axios from 'axios';
 
 const title_style = {
     padding: 20
@@ -9,7 +10,36 @@ const title_style = {
 class TopicsSearch extends Component {
     
     
-    state = {  }
+    state = {
+        name: ""
+    }
+        
+    addTopic = async function(cred) {
+        console.log("entered post");
+        console.log(cred)
+        await axios.post("/api/topics", cred, {
+            headers: {"x-auth-token": sessionStorage.getItem("authToken")}
+        }).then(res => {
+            console.log("entered success");
+            console.log(res.data);
+            if(res.status === 200) {
+              window.location.reload();
+            }
+        }).catch(err => {
+            console.log(err.message);
+        })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        this.addTopic(this.state);
+    }
+
+    trackChange = event => {
+        this.setState({
+          [event.target.id]: event.target.value
+        });
+    }
     
     renderCards = function(){
         const {data, loaded, onSetTopic} = this.props;
@@ -44,6 +74,26 @@ class TopicsSearch extends Component {
             <br></br>
             <Container>
                 {this.renderCards()}
+                <div className="row" style = {title_style}>
+                    <div className = "col">
+                        <form className="card" onSubmit={this.handleSubmit}>
+                            <h1 className="text-center" style={title_style}>Add Topic</h1>
+                            <div class="form-group row">
+                            <label class="col-sm-2 offset-sm-1"> Topic Name </label>
+                            <div class="col-sm-8">
+                            <FormGroup controlId="name" bsSize="medium">
+                                <FormControl autoFocus type="name" value={this.state.name} onChange = {this.trackChange}/>
+                            </FormGroup>                               
+                            </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-sm-8 offset-sm-2">
+                                <Button block bsSize="large" type="submit">Add</Button>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </Container>
         
         </React.Fragment>): (<div className="spinner-border spinner-border-xl" role="status"></div>)}
