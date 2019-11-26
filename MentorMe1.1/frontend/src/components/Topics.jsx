@@ -16,6 +16,25 @@ class Topics extends Component {
     this.setState({ activeID: topicid });
   };
 
+  handleInterest = topic => {
+    const data = [...this.state.data];
+    console.log(topic);
+    const action = topic.interested
+      ? `/api/topics/${topic.topicid}/removeinterest`
+      : `/api/topics/${topic.topicid}/addinterest`;
+    axios
+      .post(
+        action,
+        {},
+        {
+          headers: { "x-auth-token": sessionStorage.getItem("authToken") }
+        }
+      )
+      .catch(err => console.log(err.response.data));
+    topic.interested = !topic.interested;
+    this.setState({ data });
+  };
+
   componentDidMount() {
     axios
       .get("/api/topics", {
@@ -36,12 +55,17 @@ class Topics extends Component {
     return (
       <React.Fragment>
         {activeID ? (
-          <TopicChat socket={socket} topicid={activeID} />
+          <TopicChat
+            socket={socket}
+            topicid={activeID}
+            onToggleInterest={topic => this.handleInterest(topic)}
+          />
         ) : (
           <TopicsSearch
             data={data}
             loaded={loaded}
             onSetTopic={id => this.handleSetTopic(id)}
+            onToggleInterest={topic => this.handleInterest(topic)}
           ></TopicsSearch>
         )}
 
