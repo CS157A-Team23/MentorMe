@@ -4,8 +4,8 @@ import {Container, FormGroup, FormControl, Button} from 'react-bootstrap';
 import axios from 'axios';
 
 const title_style = {
-    padding: 20
-}
+  padding: 20
+};
 
 class TopicsSearch extends Component {
     
@@ -42,39 +42,70 @@ class TopicsSearch extends Component {
     }
     
     renderCards = function(){
-        const {data, loaded, onSetTopic} = this.props;
+        const {data, loaded, onSetTopic, onToggleInterest} = this.props;
         const rows = [];
         for (let i = 0; i < data.length; i+=2){
-            if (i + 1 >= data.length){
+            if (i + 1 >= data.length) {
                 rows.push(
-                    <div className="row" style={title_style}>
-                        <div className="col"><Card name={data[i].name} onClick={() => onSetTopic(data[i].topicid)}/></div>
-                    </div>);
-            }
-            else{
+                  <div className="row" style={title_style}>
+                    <div className="col">
+                      <Card
+                        topic={data[i]}
+                        onSetTopic={onSetTopic}
+                        onToggleInterest={onToggleInterest}
+                      />
+                    </div>
+                    <div className="col"></div>
+                  </div>
+                );
+              } else {
                 rows.push(
-                <div className="row" style={title_style}>
-                    <div className="col"><Card name={data[i].name} onClick={() => onSetTopic(data[i].topicid)}/></div>
-                    <div className="col"><Card name={data[i+1].name} onClick={() => onSetTopic(data[i+1].topicid)}/></div>
-                    
-                </div>);
+                  <div className="row" style={title_style}>
+                    <div className="col">
+                      <Card
+                        topic={data[i]}
+                        onSetTopic={onSetTopic}
+                        onToggleInterest={onToggleInterest}
+                      />
+                    </div>
+                    <div className="col">
+                      <Card
+                        topic={data[i + 1]}
+                        onSetTopic={onSetTopic}
+                        onToggleInterest={onToggleInterest}
+                      />
+                    </div>
+                  </div>);
             }
         }
         return rows;
     }
 
-    render() { 
-        const {data, loaded} = this.props;
-        return (<Container>
-            {loaded ? (<React.Fragment>
-            <form className="form-inline" >
-            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  render() {
+    const { data, loaded } = this.props;
+    return (
+      <Container>
+        {loaded ? (
+          <React.Fragment>
+            <form className="form-inline container">
+            <input 
+                className="form-control mr-sm-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button
+                className="btn btn-outline-success my-2 my-sm-0"
+                type="submit"
+              >
+                Search
+              </button>
             </form>
             <br></br>
             <Container>
                 {this.renderCards()}
-                <div className="row" style = {title_style}>
+                <br></br>
+                <div className="row">
                     <div className = "col">
                         <form className="card" onSubmit={this.handleSubmit}>
                             <h1 className="text-center" style={title_style}>Add Topic</h1>
@@ -89,6 +120,7 @@ class TopicsSearch extends Component {
                             <div class="row">
                             <div class="col-sm-8 offset-sm-2">
                                 <Button block bsSize="large" type="submit">Add</Button>
+                                <br></br>
                             </div>
                             </div>
                         </form>
@@ -100,5 +132,5 @@ class TopicsSearch extends Component {
         </Container>  );
     }
 }
- 
+
 export default TopicsSearch;

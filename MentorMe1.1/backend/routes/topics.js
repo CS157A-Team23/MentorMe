@@ -13,9 +13,22 @@ module.exports = router;
  * Response
  * [{topicid, name},{}...]
  * */
-router.get("/", async (req, res) => {
-  const topics = await db.query(`SELECT id AS topicid, name FROM topic`, {
+router.get("/", auth, async (req, res) => {
+  let topics = await db.query(`SELECT id AS topicid, name FROM topic`, {
     type: db.QueryTypes.SELECT
+  });
+  let interests = await db.query(
+    `SELECT topic_id FROM interests WHERE user_id=?`,
+    { replacements: [req.user.id], type: db.QueryTypes.SELECT }
+  );
+  interests = interests.map(i => i.topic_id);
+  console.log(interests);
+  topics = topics.map(t => {
+    return {
+      topicid: t.topicid,
+      name: t.name,
+      interested: interests.includes(t.topicid)
+    };
   });
   res.send(topics);
 });
