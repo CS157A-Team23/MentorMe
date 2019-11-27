@@ -67,6 +67,7 @@ class Topics extends Component {
             loaded={loaded}
             onSetTopic={id => this.handleSetTopic(id)}
             onToggleInterest={topic => this.handleInterest(topic)}
+            renderAdditionalTopic={() => this.componentDidMount()}
           ></TopicsSearch>
         )}
 

@@ -15,6 +15,7 @@ class TopicsSearch extends Component {
     }
         
     addTopic = async function(cred) {
+        const {renderAdditionalTopic} = this.props;
         console.log("entered post");
         console.log(cred)
         await axios.post("/api/topics", cred, {
@@ -23,7 +24,8 @@ class TopicsSearch extends Component {
             console.log("entered success");
             console.log(res.data);
             if(res.status === 200) {
-              window.location.reload();
+              renderAdditionalTopic();
+              this.render();
             }
         }).catch(err => {
             console.log(err.message);
