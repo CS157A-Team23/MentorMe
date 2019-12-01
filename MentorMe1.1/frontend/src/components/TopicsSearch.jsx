@@ -1,24 +1,48 @@
 import React, { Component } from "react";
 import Card from "./Card";
 import { Container } from "react-bootstrap";
+import _ from "lodash";
 
 const title_style = {
   padding: 20
 };
 
 class TopicsSearch extends Component {
-  state = {};
+  state = {
+    search: ""
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.setState({
+      search: this.state.search
+    });
+  };
+
+  trackChange = event => {
+    this.setState({
+      search: event.target.value
+    });
+  };
 
   renderCards = function() {
+    const { search } = this.state;
     const { data, loaded, onSetTopic, onToggleInterest } = this.props;
+    // filter cards here
+    let filtered =
+      search.length === 0
+        ? data
+        : data.filter(t =>
+            _.startsWith(t.name.toLowerCase(), search.toLowerCase())
+          );
     const rows = [];
-    for (let i = 0; i < data.length; i += 2) {
-      if (i + 1 >= data.length) {
+    for (let i = 0; i < filtered.length; i += 2) {
+      if (i + 1 >= filtered.length) {
         rows.push(
           <div className="row" style={title_style}>
             <div className="col">
               <Card
-                topic={data[i]}
+                topic={filtered[i]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
               />
@@ -30,14 +54,14 @@ class TopicsSearch extends Component {
           <div className="row" style={title_style}>
             <div className="col">
               <Card
-                topic={data[i]}
+                topic={filtered[i]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
               />
             </div>
             <div className="col">
               <Card
-                topic={data[i + 1]}
+                topic={filtered[i + 1]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
               />
@@ -50,17 +74,19 @@ class TopicsSearch extends Component {
   };
 
   render() {
-    const { data, loaded } = this.props;
+    const { search } = this.state;
+    const { loaded } = this.props;
+
     return (
       <Container>
         {loaded ? (
           <React.Fragment>
-            <form className="form-inline">
+            <form className="form-inline" onSubmit={this.handleSubmit}>
               <input
                 className="form-control mr-sm-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
+                type="text"
+                value={search}
+                onChange={this.trackChange}
               />
               <button
                 className="btn btn-outline-success my-2 my-sm-0"
