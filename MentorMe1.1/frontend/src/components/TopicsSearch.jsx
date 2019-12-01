@@ -138,7 +138,7 @@ trackAddChange = event =>{
                             <label class="col-sm-2 offset-sm-1"> Topic Name </label>
                             <div class="col-sm-8">
                             <FormGroup controlId="name" bsSize="medium">
-                                <FormControl type="name" value={this.state.name} onChange = {this.trackChange}/>
+                                <FormControl type="name" value={this.state.name} onChange = {this.trackAddChange}/>
                             </FormGroup>                               
                             </div>
                             </div>
