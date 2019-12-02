@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ChatContainer from "./common/ChatContainer";
+import Profile from "./Profile";
 import axios from "axios";
 import _ from "lodash";
 const MESSAGE_SEND = "MESSAGE_SEND";
@@ -257,6 +258,7 @@ class Connections extends Component {
   }
 
   renderProfile() {
+    const {activeProfile} = this.state;
     return (
     <React.Fragment>
       <div className="col-1">
@@ -265,7 +267,10 @@ class Connections extends Component {
         onClick={this.handleBackProfile}>Back</button>
       </div>
       <div className="col">
-        <div>profile</div>
+        <Profile
+          isOther={true}
+          otherData={activeProfile}
+        />
       </div>
     </React.Fragment>);
     
