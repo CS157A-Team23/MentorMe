@@ -38,6 +38,10 @@ class Profile extends Component {
         })
     }
 
+    renderRatings() {
+
+    }
+
     render() {
         
         const {data, loaded, activeID} = this.state;
@@ -55,7 +59,6 @@ class Profile extends Component {
               <Row className='border  border-1  border-top' style = {title_style}>
                 <Col><a style={{display: 'flex', justifyContent: 'center'}} href = "">2 Ratings</a></Col>
              </Row>
-             <br></br>
              </React.Fragment>
              )
              : (<div className="spinner-border spinner-border-xl" role="status"></div>)}
