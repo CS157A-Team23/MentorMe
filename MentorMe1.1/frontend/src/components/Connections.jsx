@@ -164,6 +164,22 @@ class Connections extends Component {
     this.setState({activeProfile: null});
   }
 
+  handleSetRating = (rating, chat) => {
+    console.log(rating);
+    axios
+      .post(
+        `/api/users/rate/${chat.user_id}`,
+        {rating },
+        { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
+      )
+      .then(res => {
+        chat.rating = rating;
+        const chats = [...this.state.chats];
+        this.setState({chats});
+      })
+      .catch(err => console.log(err.message));
+  }
+
   //-------------------------------- RENDER FUNCTIONS --------------------------------//
 
   renderChatContainer() {
@@ -222,7 +238,10 @@ class Connections extends Component {
                   {rel.asmentor ? " Mentor" : " Mentee"}
                 </span>
               ))}
-            <Rating rating={chat.rating}></Rating>
+            <Rating 
+              rating={chat.rating}
+              onChooseStar={(rating) => this.handleSetRating(rating, chat)}
+              ></Rating>
             </li>
           ))}
         </ul>

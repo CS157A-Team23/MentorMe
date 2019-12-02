@@ -13,7 +13,8 @@ class Rating extends Component {
   }
  
   onStarClick(nextValue, prevValue, name) {
-      console.log(nextValue);
+    const {onChooseStar} = this.props;
+    onChooseStar(nextValue);
     this.setState({rating: nextValue});
   }
  
