@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ChatContainer from "./common/ChatContainer";
 import axios from "axios";
 import _ from "lodash";
+import Rating from './Rating';
 const MESSAGE_SEND = "MESSAGE_SEND";
 const MESSAGE_RECIEVE = "MESSAGE_RECIEVE";
 const MESSAGE_ERROR = "MESSAGE_ERROR";
@@ -154,8 +155,11 @@ class Connections extends Component {
     const { socket } = this.props;
     return (
       <React.Fragment>
+       
         {activeChat ? (
+          
           <ChatContainer
+          
             chat={activeChat}
             socket={socket}
             messages={activeChat ? activeChat.messages : null}
@@ -166,6 +170,7 @@ class Connections extends Component {
             <p className="lead">
               Select a chat on the right to begin chatting!
             </p>
+            
           </div>
         )}
       </React.Fragment>
@@ -196,6 +201,7 @@ class Connections extends Component {
                   {rel.asmentor ? " Mentor" : " Mentee"}
                 </span>
               ))}
+            <Rating rating={chat.rating}></Rating>
             </li>
           ))}
         </ul>
@@ -203,6 +209,13 @@ class Connections extends Component {
     );
   }
 
+
+  renderRating()
+  {
+
+   
+
+  }
   renderPending() {
     const { pending } = this.state;
     let count = 0;
