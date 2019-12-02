@@ -46,7 +46,41 @@ class Profile extends Component {
     }
 
     renderRatings() {
-
+      const rating = this.state.data.rating;
+      const ratingcount = this.state.data.ratingcount;
+      console.log(rating);
+      console.log(ratingcount);
+      
+      if (rating == 1){
+        return(
+        <Container syle = {{fill: 'gray'}}>
+        <Row>
+          <Col><p style={{display: 'flex', justifyContent: 'center'}} href = "">{rating}</p></Col>
+          <Col><p style={{display: 'flex', justifyContent: 'center'}} href = "">{ratingcount} Ratings</p></Col>
+        </Row>
+        </Container>
+        );
+      }
+      else if (rating > 1){
+        return(
+        <Container syle = {{fill: 'gray'}}>
+        <Row>
+          <Col><p style={{display: 'flex', justifyContent: 'center'}} href = "">{rating}</p></Col>
+          <Col><p style={{display: 'flex', justifyContent: 'center'}} href = "">{ratingcount} Rating</p></Col>
+        </Row>
+        </Container>
+        );
+      }
+      else{
+        return(
+          <Container style = {{fill: 'gray'}}>
+          <Row>
+              <Col><p style={{display: 'flex', justifyContent: 'center'}} href = "">0.00</p></Col>
+              <Col><p style={{display: 'flex', justifyContent: 'center'}} href = "">No Ratings</p></Col>
+          </Row>
+          </Container>
+        );
+      }
     }
 
     render() {
@@ -63,9 +97,9 @@ class Profile extends Component {
                   <Row><p><strong>Interests:</strong> {data.interests.map((interest) => <span style ={tags}>{interest.name}</span>)} </p></Row>
                 </Col>
               </Row>
-              <Row className='border  border-1  border-top' style = {title_style}>
-                <Col><a style={{display: 'flex', justifyContent: 'center'}} href = "">2 Ratings</a></Col>
-             </Row>
+              <Container>
+              {this.renderRatings()}
+              </Container>
              </React.Fragment>
              )
              : (<div className="spinner-border spinner-border-xl" role="status"></div>)}
