@@ -21,13 +21,19 @@ router.get("/", auth, async (req, res) => {
     `SELECT topic_id FROM interests WHERE user_id=?`,
     { replacements: [req.user.id], type: db.QueryTypes.SELECT }
   );
+  let skills = await db.query(
+    `SELECT topic_id, skill FROM proficiency WHERE user_id=?`,
+    {replacements:[req.user.id], type: db.QueryTypes.SELECT}
+  );
   interests = interests.map(i => i.topic_id);
   console.log(interests);
   topics = topics.map(t => {
+    const skl = skills.find( s => s.topic_id === t.topicid);
     return {
       topicid: t.topicid,
       name: t.name,
-      interested: interests.includes(t.topicid)
+      interested: interests.includes(t.topicid),
+      skill: skl ? skl.skill : 0
     };
   });
   res.send(topics);

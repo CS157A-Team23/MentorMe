@@ -15,6 +15,20 @@ class Topics extends Component {
     loaded: false,
     activeID: null,
   };
+  
+  handleSetSkill = (skill, topic) => {
+    console.log(skill, topic);
+    axios.post(
+      `/api/topics/${topic.topicid}/setskill`,
+      {skill},
+      { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
+    )
+    .then(res => {
+      topic.skill = skill;
+      this.setState({data: [...this.state.data]});
+    })
+    .catch(err => console.log(err.message));
+  }
 
   handleSetTopic = topicid => {
     this.setState({ activeID: topicid });
@@ -72,6 +86,7 @@ class Topics extends Component {
             loaded={loaded}
             onSetTopic={id => this.handleSetTopic(id)}
             onToggleInterest={topic => this.handleInterest(topic)}
+            onSetSkill = {(skill,topic) => this.handleSetSkill(skill, topic)}
             renderAdditionalTopic={() => this.componentDidMount()}
           ></TopicsSearch>
         )}

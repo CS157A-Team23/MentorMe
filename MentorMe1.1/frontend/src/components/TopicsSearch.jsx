@@ -61,7 +61,7 @@ addTopic = async function(cred) {
 
   renderCards = function() {
     const { search } = this.state;
-    const { data, loaded, onSetTopic, onToggleInterest } = this.props;
+    const { data, loaded, onSetTopic, onToggleInterest, onSetSkill } = this.props;
     // filter cards here
     let filtered =
       search.length === 0
@@ -79,6 +79,8 @@ addTopic = async function(cred) {
                 topic={filtered[i]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
+                onSetSkill={(skill) => {onSetSkill(skill, filtered[i])}}
+                skill={filtered[i].skill}
               />
             </div>
           </div>
@@ -91,6 +93,8 @@ addTopic = async function(cred) {
                 topic={filtered[i]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
+                onSetSkill={(skill) => {onSetSkill(skill, filtered[i])}}
+                skill={filtered[i].skill}
               />
             </div>
             <div className="col">
@@ -98,6 +102,8 @@ addTopic = async function(cred) {
                 topic={filtered[i + 1]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
+                onSetSkill={(skill) => {onSetSkill(skill, filtered[i])}}
+                skill={filtered[i + 1].skill}
               />
             </div>
           </div>
@@ -106,6 +112,8 @@ addTopic = async function(cred) {
     }
     return rows;
   };
+
+  
 
   render() {
     const { search } = this.state;

@@ -6,7 +6,6 @@ import Topics from './components/Topics';
 import Profile from  './components/Profile';
 import Header from './components/Header';
 import SignUp from './components/signUp';
-import Rating from './components/Rating';
 const socketURL = window.location.host;
 const USER_CONNECT = "USER_CONNECT";
 const ATTEMPT_RECONNECT = "ATTEMPT_RECONNECT";
