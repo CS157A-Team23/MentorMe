@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Card from "./Card";
-import { Container } from "react-bootstrap";
+import { Container,  Button, FormControl, FormGroup } from "react-bootstrap";
 import _ from "lodash";
 import axios from 'axios';
 
@@ -27,6 +27,36 @@ trackChange = event => {
   this.setState({
     search: event.target.value
   });
+};
+
+
+trackAddChange = event =>{
+  this.setState({
+    [event.target.id]: event.target.value
+  });
+}
+
+handleAddTopic = event => {
+  event.preventDefault();
+  this.addTopic(this.state);
+};
+
+addTopic = async function(cred) {
+  const {renderAdditionalTopic} = this.props;
+  const {name} = cred;
+  console.log("entered post");
+  await axios.post("/api/topics", {name}, {
+      headers: {"x-auth-token": sessionStorage.getItem("authToken")}
+  }).then(res => {
+      console.log("entered success");
+      console.log(res.data);
+      if(res.status === 200) {
+        renderAdditionalTopic();
+        this.render();
+      }
+  }).catch(err => {
+      console.log(err.message);
+  })
 };
 
   renderCards = function() {
@@ -103,7 +133,29 @@ trackChange = event => {
             <Container>
                 {this.renderCards()}
             </Container>
-        
+        <Container>
+        <div className="row">
+          <div className = "col">
+              <form className="card" onSubmit={this.handleAddTopic}>
+                  <h1 className="text-center" style={title_style}>Add Topic</h1>
+                  <div class="form-group row">
+                   <label class="col-sm-2 offset-sm-1"> Topic Name </label>
+                   <div class="col-sm-8">
+                      <FormGroup controlId="name" bsSize="medium">
+                         <FormControl type="name" value={this.state.name} onChange = {this.trackAddChange}/>
+                       </FormGroup>                               
+                   </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-sm-8 offset-sm-2">
+                       <Button block bsSize="large" type="submit">Add</Button>
+                       <br></br>
+                      </div>
+                    </div>
+                </form>
+          </div>
+        </div>
+        </Container>
         </React.Fragment>): (<div className="spinner-border spinner-border-xl" role="status"></div>)}
         </Container>  );
     }

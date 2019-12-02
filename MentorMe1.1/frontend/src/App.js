@@ -57,7 +57,7 @@ class App extends Component {
         display = <Connections socket={socket} />;
         break;
       case 2:
-        display = <Profile socket={socket}/>;
+        display = <Profile/>;
         break;
     }
     return (
