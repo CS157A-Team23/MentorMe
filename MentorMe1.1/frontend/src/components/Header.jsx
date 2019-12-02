@@ -23,7 +23,7 @@ const Header = props => {
         className="text-center btn btn-outline-primary mx-2"
         onClick={() => onSetPage(2)}
       >
-        Profile
+        Me
       </button>
     </nav>
   );
