@@ -28,14 +28,21 @@ class Profile extends Component {
 
 
     componentDidMount() {
+      const {isOther, otherData} = this.props;
+      if (isOther) {
+        this.setState({data: otherData, loaded:true});
+      }
+      else {
         axios.get("/api/users/me", {
-            headers: {"x-auth-token": sessionStorage.getItem("authToken")}
+          headers: {"x-auth-token": sessionStorage.getItem("authToken")}
         }).then(res => {
-            console.log(res.data);
-            this.setState({data:res.data, loaded:true});
-        }).catch(err => {
-            console.log(err.message);
-        })
+          console.log(res.data);
+          this.setState({data:res.data, loaded:true});
+          }).catch(err => {
+          console.log(err.message);
+      })
+      }
+        
     }
 
     renderRatings() {

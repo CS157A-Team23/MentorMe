@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ChatContainer from "./common/ChatContainer";
+import Profile from "./Profile";
 import axios from "axios";
 import _ from "lodash";
 const MESSAGE_SEND = "MESSAGE_SEND";
@@ -12,7 +13,8 @@ class Connections extends Component {
     chats: [],
     activeChat: null,
     events: [],
-    pending: []
+    pending: [],
+    activeProfile: null
   };
 
   //-------------------------------- LIFECYCLE HOOKS --------------------------------//
@@ -147,6 +149,20 @@ class Connections extends Component {
       .catch(err => console.log(err.message));
   };
 
+  handleViewProfile = (e, id) => {
+    axios.get(`/api/users/id/${id}`)
+      .then(res => {
+        const info = res.data;
+        console.log(info);
+        this.setState({activeProfile: info})
+      })
+      .catch(err => console.log(err.message));
+    e.stopPropagation();
+  }
+  handleBackProfile = () => {
+    this.setState({activeProfile: null});
+  }
+
   //-------------------------------- RENDER FUNCTIONS --------------------------------//
 
   renderChatContainer() {
@@ -189,6 +205,11 @@ class Connections extends Component {
               }
             >
               {chat.name}
+              <button 
+                key={chat.id}
+                className="btn btn-sm btn-outline-primary"
+                onClick={e => this.handleViewProfile(e, chat.user_id)}
+              >Profile</button>
               <div className="w-100"></div>
               {chat.relations.map(rel => (
                 <span key={rel.name + rel.asmentor} class="badge badge-info">
@@ -236,12 +257,32 @@ class Connections extends Component {
     );
   }
 
+  renderProfile() {
+    const {activeProfile} = this.state;
+    return (
+    <React.Fragment>
+      <div className="col-1">
+        <button 
+        className="btn btn-primary btn-sm"
+        onClick={this.handleBackProfile}>Back</button>
+      </div>
+      <div className="col">
+        <Profile
+          isOther={true}
+          otherData={activeProfile}
+        />
+      </div>
+    </React.Fragment>);
+    
+  }
+
   render() {
+    const {activeProfile} = this.state;
     return (
       <div className="container">
-        <div className="row">
+        {activeProfile ?  this.renderProfile() :
+          (<div className="row">
           <div className="col-9">
-            <h3>Connections</h3>
             {this.renderChatContainer()}
           </div>
           <div className="col-3">
@@ -249,6 +290,8 @@ class Connections extends Component {
             {this.renderPending()}
           </div>
         </div>
+        )
+        }
       </div>
     );
   }
