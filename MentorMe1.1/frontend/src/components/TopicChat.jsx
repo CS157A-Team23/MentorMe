@@ -13,6 +13,11 @@ class TopicChat extends Component {
     activeMember: null
   };
 
+  goBack = (id) => {
+    const { socket, topicid, onSetTopic} = this.props;
+    onSetTopic(null);
+  }
+
   componentDidMount() {
     const { socket, topicid, setBack} = this.props;
     socket.emit(GET_TOPIC_CHATLOG, topicid, this.initializationCallback);
@@ -146,6 +151,11 @@ class TopicChat extends Component {
         <div className="row">
           <div className="col">{this.renderChatContainer()}</div>
           <div className="col">{this.renderMembers()}</div>
+          <div className="col-xs-1">
+            <button className="justify-content-center text-center btn btn-outline-primary" 
+              onClick={() => this.goBack(null)}>Back
+              </button>
+          </div>
         </div>
       </div>
     );

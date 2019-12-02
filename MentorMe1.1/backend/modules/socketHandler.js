@@ -177,6 +177,7 @@ const generateChatlog = async (chat, id) => {
   return {
     id: chat.id,
     name: user.first_name,
+    user_id: otherId,
     messages,
     relations,
     rating: r ? r.rating : null
