@@ -102,7 +102,7 @@ addTopic = async function(cred) {
                 topic={filtered[i + 1]}
                 onSetTopic={onSetTopic}
                 onToggleInterest={onToggleInterest}
-                onSetSkill={(skill) => {onSetSkill(skill, filtered[i])}}
+                onSetSkill={(skill) => {onSetSkill(skill, filtered[i + 1])}}
                 skill={filtered[i + 1].skill}
               />
             </div>

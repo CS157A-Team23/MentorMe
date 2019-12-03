@@ -7,24 +7,27 @@ const Header = props => {
       <a className="navbar-brand" href="#">
         MentorMe
       </a>
-      <button
-        className="text-center btn btn-outline-primary mx-2"
-        onClick={() => onSetPage(0)}
-      >
-        Topics
-      </button>
-      <button
-        className="text-center btn btn-outline-primary mx-2"
-        onClick={() => onSetPage(1)}
-      >
-        Connects
-      </button>
-      <button
-        className="text-center btn btn-outline-primary mx-2"
-        onClick={() => onSetPage(2)}
-      >
-        Me
-      </button>
+      <div className="">
+        <button
+          className="text-center btn btn-outline-primary mx-2"
+          onClick={() => onSetPage(0)}
+        >
+          Topics
+        </button>
+        <button
+          className="text-center btn btn-outline-primary mx-2"
+          onClick={() => onSetPage(1)}
+        >
+          Connects
+        </button>
+        <button
+          className="text-center btn btn-outline-primary mx-2"
+          onClick={() => onSetPage(2)}
+        >
+          Me
+        </button>
+      </div>
+      <p className="ml-auto mt-2">{sessionStorage.getItem('firstname')}</p>
     </nav>
   );
 };

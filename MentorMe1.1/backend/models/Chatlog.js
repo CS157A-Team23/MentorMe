@@ -13,6 +13,6 @@ const Chatlog = db.define("chatlog", {
   }
 });
 
-//Chatlog.removeAttribute('id');
+Chatlog.removeAttribute('id');
 
 exports.Chatlog = Chatlog;
