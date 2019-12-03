@@ -1,0 +1,54 @@
+.vl {
+    border-left: 2px solid black;
+    height: 150px;
+    width: 100px;
+    position: float-center;
+    left: 50%;
+    margin-top: 100px;
+    margin-left: -3px;
+    top: 0;
+  }
+  
+  .carousel-homepage {
+    margin-right: 200px;
+    margin-left: 200px;
+  }
+  
+  @media all and (min-width: 480px) {
+    .SignUp {
+      padding: 90px;
+      /* background-color: #4dd0e1; */
+    }
+  
+    .SignUp form {
+      margin: 0 auto;
+      max-width: 400px;
+    }
+  
+    #rightSignUp {
+      float: left;
+      margin: 0px 0px 0px 160px;
+    }
+  
+    .separator { 
+      width: 6px; /* Line width */
+        background-color: black; /* Line color */
+        /* height: 100%; Override in-line if you want specific height. */
+        float: left;
+    }
+    
+    #rightSignUp {
+      /* background-color: aquamarine; */
+      float: left;
+      /* max-width: 320px; */
+      /* margin: 0px 170px; */
+      padding: 90px;
+    }
+  
+    #rightSignUp form{
+      /* margin: 0 170px; */
+      max-width: 320px;
+    }
+  
+  
+  }

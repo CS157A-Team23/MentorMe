@@ -70,10 +70,14 @@ class App extends Component {
     );
   }
   renderLogin() {
-    return (<div>
+    return (
+    <div>
+      <div className="row">
+        <h1 className="col text-center mt-4">MentorMe</h1>
+      </div>
       <div className="row">
         <div className="col"><Login setLogin={this.setLogin}/></div>
-        <div className="col"><SignUp setLogin={this.setLogin}></SignUp></div>
+        <div className="col"><SignUp setLogin={this.setLogin}/></div>
       </div>
       </div>
     );
