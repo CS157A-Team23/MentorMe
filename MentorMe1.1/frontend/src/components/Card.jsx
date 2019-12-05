@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import axios from "axios";
 
 class Card extends Component {
-  state = {  }
+  state = {};
 
   renderSkill(filled) {
     const max = 5;
-    const {onSetSkill} = this.props;
+    const { onSetSkill } = this.props;
     const ratio = filled / max;
     let color = "orange";
     if (ratio <= 0.2) {
@@ -18,29 +17,31 @@ class Card extends Component {
     for (let i = 1; i <= max; i++) {
       if (i <= filled) {
         hearts.push(
-        <i 
-          key={i}
-          className="fa fa-circle" 
-          style={{ color }}
-          onClick={() => onSetSkill(i)}
-          ></i>);
+          <i
+            key={i}
+            className="fa fa-circle"
+            style={{ color }}
+            onClick={() => onSetSkill(i)}
+          ></i>
+        );
       } else {
         hearts.push(
-        <i 
-          key={i}
-          className="fa fa-circle-o"
-          onClick={() => onSetSkill(i)} 
-        ></i>);
+          <i
+            key={i}
+            className="fa fa-circle-o"
+            onClick={() => onSetSkill(i)}
+          ></i>
+        );
       }
     }
     return <span className="ml-1">{hearts}</span>;
-  };
-
-  clicked = (num) => {
-    console.log(num);
   }
 
-  render() { 
+  clicked = num => {
+    console.log(num);
+  };
+
+  render() {
     const { topic, onSetTopic, onToggleInterest, skill } = this.props;
     const { name, interested, topicid } = topic;
     return (
@@ -53,7 +54,7 @@ class Card extends Component {
         </div>
         <footer className="footer text-right mr-2 mb-2">
           <div className="mr-2">{this.renderSkill(skill ? skill : 0)}</div>
-          
+
           <i
             className={interested ? "fa fa-heart text-danger" : "fa fa-heart-o"}
             onClick={() => onToggleInterest(topic)}
@@ -63,9 +64,5 @@ class Card extends Component {
     );
   }
 }
- 
+
 export default Card;
-
-
-
-

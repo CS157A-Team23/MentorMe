@@ -27,11 +27,9 @@ const Header = props => {
           Me
         </button>
       </div>
-      <p className="ml-auto mt-2">{sessionStorage.getItem('firstname')}</p>
+      <p className="ml-auto mt-2">{sessionStorage.getItem("firstname")}</p>
     </nav>
   );
 };
 
 export default Header;
-// date-fns
-//socket.off("event");

@@ -2,6 +2,7 @@ import React from "react";
 import "../../css/ChatContainer.css";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
+
 const ChatContainer = props => {
   return (
     <div className="container">
@@ -21,10 +22,3 @@ const ChatContainer = props => {
 };
 
 export default ChatContainer;
-// chatid={activeChat}
-// socket={socket}
-// messages={activeChat ? activeChat.messages : null}
-// name={tempUsername}
-// onSend={message =>
-// this.handleSend(activeChat.id, tempUsername, message)
-//                     }

@@ -1,34 +1,29 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Card from "./Card";
-import { Container } from "react-bootstrap";
 import TopicsSearch from "./TopicsSearch";
 import TopicChat from "./TopicChat";
-
-const title_style = {
-  padding: 20
-};
 
 class Topics extends Component {
   state = {
     data: [],
     loaded: false,
-    activeID: null,
+    activeID: null
   };
-  
+
   handleSetSkill = (skill, topic) => {
     console.log(skill, topic);
-    axios.post(
-      `/api/topics/${topic.topicid}/setskill`,
-      {skill},
-      { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
-    )
-    .then(res => {
-      topic.skill = skill;
-      this.setState({data: [...this.state.data]});
-    })
-    .catch(err => console.log(err.message));
-  }
+    axios
+      .post(
+        `/api/topics/${topic.topicid}/setskill`,
+        { skill },
+        { headers: { "x-auth-token": sessionStorage.getItem("authToken") } }
+      )
+      .then(res => {
+        topic.skill = skill;
+        this.setState({ data: [...this.state.data] });
+      })
+      .catch(err => console.log(err.message));
+  };
 
   handleSetTopic = topicid => {
     this.setState({ activeID: topicid });
@@ -53,7 +48,6 @@ class Topics extends Component {
     this.setState({ data });
   };
 
-
   componentDidMount() {
     axios
       .get("/api/topics", {
@@ -77,7 +71,7 @@ class Topics extends Component {
           <TopicChat
             socket={socket}
             topicid={activeID}
-            onSetTopic={id=>this.handleSetTopic(id)}
+            onSetTopic={id => this.handleSetTopic(id)}
             onToggleInterest={topic => this.handleInterest(topic)}
           />
         ) : (
@@ -86,7 +80,7 @@ class Topics extends Component {
             loaded={loaded}
             onSetTopic={id => this.handleSetTopic(id)}
             onToggleInterest={topic => this.handleInterest(topic)}
-            onSetSkill = {(skill,topic) => this.handleSetSkill(skill, topic)}
+            onSetSkill={(skill, topic) => this.handleSetSkill(skill, topic)}
             renderAdditionalTopic={() => this.componentDidMount()}
           ></TopicsSearch>
         )}

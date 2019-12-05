@@ -6,7 +6,7 @@ const Myfunctions = {};
 const postLogin = async function(cred) {
   console.log("entered post");
   try {
-    const res = await axios.post("/api/login", cred); // cred = 'email', 'password'
+    const res = await axios.post("/api/login", cred);
     console.log("entered success");
     const token = res.headers["x-auth-token"];
     setData(token);
@@ -20,7 +20,7 @@ const postSignUp = async function(cred) {
   console.log("entered post");
   try {
     console.log(cred);
-    const res = await axios.post("/api/users", cred); // cred = 'email', 'password', 'first_name', 'last_name'
+    const res = await axios.post("/api/users", cred);
     console.log("entered success");
     const token = res.headers["x-auth-token"];
     console.log(token);
@@ -31,24 +31,6 @@ const postSignUp = async function(cred) {
     return { status: error.response.status, body: error.response.data };
   }
 };
-
-async function syncTest() {
-  // axios.get('/me', { the other way to getting the axios, not reccomended for multiple async operations
-  //     headers: {
-  //         'x-auth-token': sessionStorage.authToken
-  //     }
-  // }).then(res => {
-  //     //continue operation
-  // }).catch(err => {});
-  try {
-    const res = await axios.get("/me", {
-      headers: {
-        "x-auth-token": sessionStorage.authToken
-      }
-    });
-  } catch (err) {}
-  // or continue here
-}
 
 const setData = token => {
   console.log(token);

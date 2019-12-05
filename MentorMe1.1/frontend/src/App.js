@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import Connections from "./components/Connections";
 import io from "socket.io-client";
-import Login from './components/Login';
-import Topics from './components/Topics';
-import Profile from  './components/Profile';
-import Header from './components/Header';
-import SignUp from './components/signUp';
-const socketURL = window.location.host;
+import Login from "./components/Login";
+import Topics from "./components/Topics";
+import Profile from "./components/Profile";
+import Header from "./components/Header";
+import SignUp from "./components/signUp";
 const USER_CONNECT = "USER_CONNECT";
 const ATTEMPT_RECONNECT = "ATTEMPT_RECONNECT";
 
@@ -18,7 +17,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const { socket, loggedin } = this.state;
+    const { socket } = this.state;
     socket.on("connect", () => {
       console.log("connected");
     });
@@ -57,7 +56,7 @@ class App extends Component {
         display = <Connections socket={socket} />;
         break;
       case 2:
-        display = <Profile/>;
+        display = <Profile />;
         break;
     }
     return (
@@ -71,18 +70,22 @@ class App extends Component {
   }
   renderLogin() {
     return (
-    <div>
-      <div className="row">
-        <h1 className="col text-center mt-4">MentorMe</h1>
-      </div>
-      <div className="row">
-        <div className="col"><Login setLogin={this.setLogin}/></div>
-        <div className="col"><SignUp setLogin={this.setLogin}/></div>
-      </div>
+      <div>
+        <div className="row">
+          <h1 className="col text-center mt-4">MentorMe</h1>
+        </div>
+        <div className="row">
+          <div className="col">
+            <Login setLogin={this.setLogin} />
+          </div>
+          <div className="col">
+            <SignUp setLogin={this.setLogin} />
+          </div>
+        </div>
       </div>
     );
   }
-  // dont unmount chat manager, just set zindex to hide
+
   render() {
     return (
       <React.Fragment>
