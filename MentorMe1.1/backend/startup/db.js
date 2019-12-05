@@ -8,6 +8,7 @@ const { Topic } = require("../models/Topic");
 const { User } = require("../models/User");
 const { UserChat } = require("../models/UserChat");
 const { TopicChat } = require("../models/TopicChat");
+
 // Proficiency
 User.belongsToMany(Topic, {
   as: "Skill",

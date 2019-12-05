@@ -1,9 +1,5 @@
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const { Chat } = require("../models/Chat");
-const Sequelize = require("sequelize");
-const db = require("./database");
-const Op = Sequelize.Op;
 
 generateAuthToken = async function(user) {
   const payload = {
