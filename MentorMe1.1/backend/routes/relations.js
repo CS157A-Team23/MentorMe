@@ -95,7 +95,7 @@ router.post("/set", auth, async (req, res) => {
     relation.mentee_accepted
   ) {
     let chat = await db.query(
-      `SELECT * FROM chat
+      `SELECT * FROM userchat
           WHERE user1_id=? AND user2_id=? OR user1_id=? AND user2_id=?`,
       {
         replacements: [
@@ -110,14 +110,13 @@ router.post("/set", auth, async (req, res) => {
     let newChat = false;
     if (!chat) {
       newChat = true;
-      const [chatid, success] = await db.query(
-        `INSERT INTO chat(user1_id, user2_id)
-                VALUES(?,?)`,
-        {
-          replacements: [relation.mentor_id, relation.mentee_id],
-          type: db.QueryTypes.INSERT
-        }
-      );
+      const [chatid, success] = await db.query(`INSERT INTO chat VALUES()`, {
+        type: db.QueryTypes.INSERT
+      });
+      await db.query(`INSERT INTO userchat VALUES(?,?,?)`, {
+        replacements: [relation.mentor_id, relation.mentee_id, chatid],
+        type: db.QueryTypes.INSERT
+      });
       chat = { id: chatid };
     }
     await db.query(
@@ -129,10 +128,9 @@ router.post("/set", auth, async (req, res) => {
       }
     );
     if (newChat) {
-      alertNewChat(req.user.id, chat.id, user.first_name);
-      alertNewChat(user.id, chat.id, req.user.first_name);
+      alertNewChat(req.user.id, user.id, chat.id, user.first_name);
+      alertNewChat(user.id, req.user.id, chat.id, req.user.first_name);
     }
-    
   }
   res.send("connection sent");
 });

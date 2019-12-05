@@ -6,7 +6,8 @@ const { Proficiency } = require("../models/Proficiency");
 const { Rates } = require("../models/Rates");
 const { Topic } = require("../models/Topic");
 const { User } = require("../models/User");
-
+const { UserChat } = require("../models/UserChat");
+const { TopicChat } = require("../models/TopicChat");
 // Proficiency
 User.belongsToMany(Topic, {
   as: "Skill",
@@ -34,10 +35,6 @@ Topic.belongsToMany(User, {
   foreignKey: "topic_id",
   onDelete: "CASCADE"
 });
-
-// Chat
-Topic.hasOne(Chat);
-Chat.belongsTo(Topic);
 
 // Chatlog
 User.hasMany(Chatlog, { onDelete: "CASCADE" });

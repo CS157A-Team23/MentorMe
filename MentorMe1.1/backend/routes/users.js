@@ -5,7 +5,6 @@ const { validateID } = require("../modules/validation");
 const { validateRating } = require("../models/Rates");
 const { validateMent } = require("../models/Mentors");
 const { User, validateUser, validateEmail } = require("../models/User");
-const { alertNewChat } = require("../modules/socketHandler");
 const auth = require("../middleware/auth");
 const express = require("express");
 const router = express.Router();

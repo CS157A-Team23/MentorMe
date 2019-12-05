@@ -23,12 +23,12 @@ router.get("/", auth, async (req, res) => {
   );
   let skills = await db.query(
     `SELECT topic_id, skill FROM proficiency WHERE user_id=?`,
-    {replacements:[req.user.id], type: db.QueryTypes.SELECT}
+    { replacements: [req.user.id], type: db.QueryTypes.SELECT }
   );
   interests = interests.map(i => i.topic_id);
   console.log(interests);
   topics = topics.map(t => {
-    const skl = skills.find( s => s.topic_id === t.topicid);
+    const skl = skills.find(s => s.topic_id === t.topicid);
     return {
       topicid: t.topicid,
       name: t.name,
@@ -207,8 +207,11 @@ router.post("/", auth, async (req, res) => {
     replacements: [name],
     type: db.QueryTypes.INSERT
   });
-  const [chatid] = await db.query(`INSERT INTO chat (topic_id) VALUES (?)`, {
-    replacements: [topicid],
+  const [chatid] = await db.query(`INSERT INTO chat VALUES ()`, {
+    type: db.QueryTypes.INSERT
+  });
+  await db.query(`INSERT INTO topicchat (topic_id, chat_id) VALUES (?,?)`, {
+    replacements: [topicid, chatid],
     type: db.QueryTypes.INSERT
   });
   res.send("Topic created");

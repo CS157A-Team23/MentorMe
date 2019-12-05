@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../modules/database");
 const Joi = require("@hapi/joi");
+
 const Rates = db.define("rates", {
   rating: {
     type: Sequelize.INTEGER,
@@ -11,8 +12,6 @@ const Rates = db.define("rates", {
     }
   }
 });
-
-//Chatlog.removeAttribute('id');
 
 function validateRating(rating) {
   const schema = Joi.object({

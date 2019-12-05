@@ -96,8 +96,8 @@ module.exports = function(socket) {
 async function getTopicChat(topidid, id) {
   // return { id, name, messages}
   const chat = await db.query(
-    `SELECT chat.id AS id, topic.name AS name
-     FROM chat JOIN topic ON topic_id = topic.id 
+    `SELECT chat_id AS id, topic.name AS name
+     FROM topicchat JOIN topic ON topic_id = topic.id 
      WHERE topic_id=?`,
     {
       replacements: [topidid],
@@ -130,7 +130,7 @@ async function getTopicChat(topidid, id) {
 async function getUserChats(userInfo) {
   console.log("Generating Chatlogs");
   const chats = await db.query(
-    `SELECT * FROM chat
+    `SELECT * FROM userchat
         WHERE user1_id=? OR user2_id=?`,
     { replacements: [userInfo.id, userInfo.id], type: db.QueryTypes.SELECT }
   );
@@ -146,7 +146,7 @@ const generateChatlog = async (chat, id) => {
     `SELECT message, user_id, created_at, first_name 
         FROM chatlog JOIN user ON user_id=user.id
         WHERE chat_id=? ORDER BY created_at`,
-    { replacements: [chat.id], type: db.QueryTypes.SELECT }
+    { replacements: [chat.chat_id], type: db.QueryTypes.SELECT }
   );
   const messages = logs.map(log => {
     return {
@@ -167,7 +167,10 @@ const generateChatlog = async (chat, id) => {
        SELECT topic_id, true AS asmentor FROM mentors
           WHERE chat_id=? AND mentee_id=?) u 
       JOIN topic ON topic_id=topic.id;`,
-    { replacements: [chat.id, id, chat.id, id], type: db.QueryTypes.SELECT }
+    {
+      replacements: [chat.chat_id, id, chat.chat_id, id],
+      type: db.QueryTypes.SELECT
+    }
   );
   const r = await db.query(
     `SELECT rating FROM rates
@@ -175,7 +178,7 @@ const generateChatlog = async (chat, id) => {
     { replacements: [id, otherId], plain: true }
   );
   return {
-    id: chat.id,
+    id: chat.chat_id,
     name: user.first_name,
     user_id: otherId,
     messages,
@@ -200,7 +203,7 @@ function authenticateUser(token) {
 /**
  * Alerts online users if a new chat is added.
  */
-async function alertNewChat(userid, chatid, chatname) {
+async function alertNewChat(userid, otherid, chatid, chatname) {
   console.log(userid, chatid, chatname);
   if (connectedUsers[userid]) {
     console.log("user is online");
@@ -219,11 +222,12 @@ async function alertNewChat(userid, chatid, chatname) {
     const r = await db.query(
       `SELECT rating FROM rates
       WHERE rater_id=? AND ratee_id=?`,
-      { replacements: [id, otherId], plain: true }
+      { replacements: [userid, otherid], plain: true }
     );
     io.to(connectedUsers[userid]).emit(ADD_CHAT, {
       id: chatid,
       name: chatname,
+      user_id: otherid,
       messages: [],
       relations,
       rating: r ? r.rating : null
