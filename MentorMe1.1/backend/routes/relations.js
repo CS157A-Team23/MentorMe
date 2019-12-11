@@ -151,7 +151,7 @@ router.post("/refuse", auth, async (req, res) => {
     mentee = req.user.id;
   } else {
     mentor = req.user.id;
-    mentee = target;
+    mentee = targetid;
   }
   await db.query(
     `DELETE FROM mentors 
