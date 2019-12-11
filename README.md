@@ -2,9 +2,9 @@
 
 SJSU Fall 2019 CS157A Section 1 Team 23.
 
-#### [-->Project Proposal<--](https://docs.google.com/document/d/191xEl2XGk7AGcIiCMkq1VEpFbaK1IXagQnY6_I51A5o/edit?usp=sharing)
+#### [>Project Proposal<](https://docs.google.com/document/d/191xEl2XGk7AGcIiCMkq1VEpFbaK1IXagQnY6_I51A5o/edit?usp=sharing)
 
-#### [-->Project Requirements<--](https://docs.google.com/document/d/1WV8IgyHZor9jhwabe3yzM_h_zN1EHyvUDX-x4yZ9Rh0/edit?usp=sharing)
+#### [>Project Requirements<](https://docs.google.com/document/d/1WV8IgyHZor9jhwabe3yzM_h_zN1EHyvUDX-x4yZ9Rh0/edit?usp=sharing)
 
 ```
 Project Requirement jobs
@@ -13,11 +13,11 @@ Jordan: Non-functional Issues
 Mohammad: Functional Requirements / GUI
 ```
 
-#
+#### [>Project Design 1.0<](https://docs.google.com/document/d/177uJQPxo0i80Cl-C0bx5Qnmhi2_MS9_nIZISewf4HiA/edit?usp=sharing)
 
-#### [-->Project Design 1.0<--](https://docs.google.com/document/d/177uJQPxo0i80Cl-C0bx5Qnmhi2_MS9_nIZISewf4HiA/edit?usp=sharing)
+#### [>Project Design 2.0<](https://docs.google.com/document/d/1aaQGpIBDItS3Z1BzWaHIJyZohfQIl5d1qrC4ntv5-l8/edit?usp=sharing)
 
-#### [-->Project Design 2.0<--](https://docs.google.com/document/d/1aaQGpIBDItS3Z1BzWaHIJyZohfQIl5d1qrC4ntv5-l8/edit?usp=sharing)
+#### [>>Final Project Report<<](https://docs.google.com/document/d/1i8ppXn5yMyVIpmBy--NxlFVAMdrNZapGtQh-AqEA188/edit?usp=sharing)
 
 #
 
@@ -73,8 +73,7 @@ Mohammad: Functional Requirements / GUI
 >
 > - `mm_jwtPrivateKey`
 > - `mysqluser`
-> - `mysqlpass`  
->
+> - `mysqlpass`
 >
 > `mm_jwtPrivateKey` will be the private key for [Json Web Tokens](https://jwt.io/) to be generated. We will be using JWT Tokens as part of the request respose cycle by authenticating and authorizing users.
 >
