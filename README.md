@@ -1,4 +1,4 @@
-# CS157A - Team23 (MentorMe)
+# MentorMe
 
 SJSU Fall 2019 CS157A Section 1 Team 23.
 
